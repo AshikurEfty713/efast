@@ -1,6 +1,7 @@
 import React from "react";
 import { useForm } from "react-hook-form";
 import { Link } from "react-router";
+import SocialLogin from "../SocialLogin/SocialLogin";
 
 const Login = () => {
 	const {
@@ -60,6 +61,10 @@ const Login = () => {
 									Register
 								</Link>
 							</p>
+						</div>
+						<h5 className="text-center">or</h5>
+						<div>
+							<SocialLogin></SocialLogin>
 						</div>
 					</div>
 				</div>

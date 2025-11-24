@@ -1,6 +1,7 @@
 import React from "react";
 import { NavLink } from "react-router";
 import logoImg from "../../../assets/others/logo.png";
+import EfastLogo from "../EfastLogo/EfastLogo";
 
 const Navbar = () => {
 	const navItems = (
@@ -10,6 +11,9 @@ const Navbar = () => {
 			</li>
 			<li>
 				<NavLink to="/about">About Us</NavLink>
+			</li>
+			<li>
+				<NavLink to="/coverage">Coverage</NavLink>
 			</li>
 		</>
 	);
@@ -39,9 +43,7 @@ const Navbar = () => {
 						{navItems}
 					</ul>
 				</div>
-				<a className="btn btn-ghost text-xl">
-					<img src={logoImg} alt="" />
-				</a>
+				<EfastLogo></EfastLogo>
 			</div>
 			<div className="navbar-center hidden lg:flex">
 				<ul className="menu menu-horizontal px-1">{navItems}</ul>

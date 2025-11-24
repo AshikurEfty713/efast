@@ -3,13 +3,14 @@ import useAuth from "../../../hooks/useAuth";
 
 const SocialLogin = () => {
 	const { signInWithGoogle } = useAuth();
+
 	const handleSignInGoogle = () => {
 		signInWithGoogle()
 			.then((result) => {
-				console.log(result);
+				console.log(result.user);
 			})
 			.catch((error) => {
-				console.log(error);
+				console.error(error);
 			});
 	};
 	return (

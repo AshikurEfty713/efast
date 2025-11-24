@@ -1,11 +1,11 @@
 import React from "react";
-import logoImg from "../../../assets/others/logo.png";
+import EfastLogo from "../EfastLogo/EfastLogo";
 
 const Footer = () => {
 	return (
 		<footer className="footer footer-horizontal footer-center bg-black text-primary-content p-10 rounded-t-3xl">
 			<aside>
-				<img src={logoImg} alt="" />
+				<EfastLogo></EfastLogo>
 				<p className="font-bold">
 					ACME Industries Ltd.
 					<br />
