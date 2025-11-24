@@ -4,6 +4,7 @@ import ServiceSection from "../Services/ServiceSection";
 import BrandSlider from "../Brand/BrandSlider";
 import Features from "../Features/Features";
 import BeMerchant from "../BeMerchant/BeMerchant";
+import WorkProcess from "../WorkProcess/WorkProcess";
 
 const Home = () => {
 	return (
@@ -12,6 +13,7 @@ const Home = () => {
 			<ServiceSection></ServiceSection>
 			<BrandSlider></BrandSlider>
 			<Features></Features>
+			<WorkProcess></WorkProcess>
 			<BeMerchant></BeMerchant>
 		</div>
 	);
