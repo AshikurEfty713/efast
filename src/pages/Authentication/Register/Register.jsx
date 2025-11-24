@@ -1,6 +1,8 @@
 import React from "react";
 import { useForm } from "react-hook-form";
 import useAuth from "../../../hooks/useAuth";
+import { Link } from "react-router";
+import SocialLogin from "../SocialLogin/SocialLogin";
 
 const Register = () => {
 	const {
@@ -38,7 +40,6 @@ const Register = () => {
 							{errors.email && (
 								<p className="text-red-500">{errors.email.message}</p>
 							)}
-
 							<label className="label">Password</label>
 							<input
 								type="password"
@@ -54,12 +55,20 @@ const Register = () => {
 									Password enter 6 characters or longer
 								</p>
 							)}
-
-							<button className="btn btn-neutral mt-4">Register</button>
+							<button className="btn bg-lime-300 text-black mt-4">
+								Register
+							</button>
 							<div>
-								<a className="link link-hover" href="/login">
-									Have An Accoung?
-								</a>
+								<p>
+									Have An Accoung?{" "}
+									<Link to="/login" className="text-lime-300 link">
+										login
+									</Link>
+								</p>
+							</div>
+							<h5 className="text-center">or</h5>
+							<div>
+								<SocialLogin></SocialLogin>
 							</div>
 						</fieldset>
 					</div>
