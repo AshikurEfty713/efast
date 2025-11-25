@@ -54,10 +54,12 @@ const Login = () => {
 						</fieldset>
 
 						<div className="flex gap-10 items-baseline">
-							<button className="btn bg-lime-300 text-black mt-4">Login</button>
+							<button className="btn bg-orange-500 text-white rounded-full px-7 mt-4">
+								Login
+							</button>
 							<p>
 								Create An Account?{" "}
-								<Link to="/register" className="text-lime-300 link">
+								<Link to="/register" className="text-orange-400 link">
 									Register
 								</Link>
 							</p>

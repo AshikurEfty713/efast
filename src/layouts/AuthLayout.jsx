@@ -5,7 +5,7 @@ import EfastLogo from "../pages/shared/EfastLogo/EfastLogo";
 
 const AuthLayout = () => {
 	return (
-		<div>
+		<div className="max-w-7xl mx-auto">
 			<div className="p-12">
 				<EfastLogo></EfastLogo>
 				<div className="hero-content flex-col lg:flex-row-reverse">

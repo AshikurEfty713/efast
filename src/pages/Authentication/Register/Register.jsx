@@ -55,13 +55,13 @@ const Register = () => {
 									Password enter 6 characters or longer
 								</p>
 							)}
-							<button className="btn bg-lime-300 text-black mt-4">
+							<button className="btn bg-orange-500 text-white rounded-full mt-4">
 								Register
 							</button>
 							<div>
 								<p>
 									Have An Accoung?{" "}
-									<Link to="/login" className="text-lime-300 link">
+									<Link to="/login" className="text-orange-400 link">
 										login
 									</Link>
 								</p>

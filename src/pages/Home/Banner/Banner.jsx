@@ -1,14 +1,14 @@
-import { motion } from 'framer-motion';
-import airplane from '../../../assets/others/bike1.png';
-import worldMap from '../../../assets/banner/banner1.jpg';
+import { motion } from "framer-motion";
+import airplane from "../../../assets/others/bike1.png";
+import worldMap from "../../../assets/banner/banner1.jpg";
 
 export default function Banner() {
 	const planeVariants = {
 		animate: {
-			offsetDistance: ['100%', '0%'],
+			offsetDistance: ["100%", "0%"],
 			transition: {
 				duration: 18,
-				ease: 'linear',
+				ease: "linear",
 				repeat: Infinity,
 			},
 		},
@@ -21,24 +21,26 @@ export default function Banner() {
 			transition: {
 				duration: 2,
 				repeat: Infinity,
-				ease: 'easeInOut',
+				ease: "easeInOut",
 			},
 		},
 	};
 
 	return (
-		<div className="relative h-[750px] max-w-full overflow-hidden bg-gradient-to-br from-cyan-400 via-sky-300 to-blue-400 ">
-			<div
-				className="max-w-full absolute inset-0 flex items-center justify-center"
-			// initial={{ scale: 1.1, opacity: 0 }}
-			// animate={{ scale: 1, opacity: 1 }}
-			// transition={{ duration: 1.5, ease: 'easeOut' }}
-			>
-				<img src={worldMap} alt="World Map" className="h-full w-full object-cover" />
+		<div className="relative h-[750px] max-w-full overflow-hidden -top-26 ">
+			<div className="max-w-full absolute inset-0 flex items-center justify-center">
+				<img
+					src={worldMap}
+					alt="World Map"
+					className="h-full w-full object-fill"
+				/>
 			</div>
 			{/* <div className="absolute inset-0 bg-blue-700/20" /> */}
 
-			<svg className="pointer-events-none absolute inset-0 h-full w-full" viewBox="0 0 1200 700" preserveAspectRatio="xMidYMid slice">
+			<svg
+				className="pointer-events-none absolute inset-0 h-full w-full"
+				viewBox="0 0 1200 700"
+				preserveAspectRatio="xMidYMid slice">
 				<motion.use
 					href="#flight-path"
 					stroke="#ffffff"
@@ -48,17 +50,18 @@ export default function Banner() {
 					filter="url(#glow)"
 					initial={{ pathLength: 0, opacity: 0 }}
 					animate={{ pathLength: 1, opacity: 0.9 }}
-					transition={{ duration: 2, ease: 'easeInOut' }}
+					transition={{ duration: 2, ease: "easeInOut" }}
 				/>
 
 				<motion.circle
 					r="6"
 					fill="#60a5fa"
 					filter="url(#glow)"
-					animate={{ offsetDistance: ['0%', '100%'] }}
-					transition={{ duration: 4, ease: 'linear', repeat: Infinity }}
+					animate={{ offsetDistance: ["0%", "100%"] }}
+					transition={{ duration: 4, ease: "linear", repeat: Infinity }}
 					style={{
-						offsetPath: "path('M 500,350 Q 650,420 800,320 Q 900,260 1020,300')",
+						offsetPath:
+							"path('M 500,350 Q 650,420 800,320 Q 900,260 1020,300')",
 					}}
 				/>
 
@@ -123,19 +126,18 @@ export default function Banner() {
 				className="absolute z-20 h-[250px] w-[250px]"
 				style={{
 					offsetPath: "path('M -100,650  Q 1200,650 2100,650')",
-					offsetRotate: 'auto',
-					offsetAnchor: 'center',
+					offsetRotate: "auto",
+					offsetAnchor: "center",
 				}}
 				variants={planeVariants}
 				animate="animate"
-				initial={{ opacity: 1 }}
-			>
+				initial={{ opacity: 1 }}>
 				<motion.img
 					src={airplane}
 					alt="Airplane"
 					className="h-full w-full object-contain drop-shadow-2xl"
 					animate={{ y: [0, 0, 0] }}
-					transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
+					transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
 				/>
 			</motion.div>
 
@@ -143,18 +145,20 @@ export default function Banner() {
 				className="absolute top-12 left-1/2 z-10 -translate-x-1/2 text-center"
 				initial={{ y: -50, opacity: 0 }}
 				animate={{ y: 0, opacity: 1 }}
-				transition={{ duration: 1, delay: 0.5 }}
-			>
-				<h1 className="text-shadow-md mb-2 text-6xl font-semibold tracking-wider text-white">Global Dreams Await</h1>
-				<p className="text-shadow-md text-xl text-white/90">Connecting the world, one flight at a time</p>
+				transition={{ duration: 1, delay: 0.5 }}>
+				<h1 className="text-shadow-lg mb-2 text-6xl font-semibold tracking-wider text-white mt-34">
+					Global Dreams Await
+				</h1>
+				<p className="text-shadow-lg text-xl text-white/90">
+					Connecting the world, one flight at a time
+				</p>
 			</motion.div>
 
 			<motion.div
 				className="absolute bottom-12 left-1/2 flex -translate-x-1/2 gap-6"
 				initial={{ y: 50, opacity: 0 }}
 				animate={{ y: 0, opacity: 1 }}
-				transition={{ duration: 1, delay: 1 }}
-			>
+				transition={{ duration: 1, delay: 1 }}>
 				<div className="rounded-2xl bg-gray-100/10 px-8 py-4 shadow-xl backdrop-blur-sm">
 					<div className="mb-1 text-4xl font-semibold text-white">350+</div>
 					<div className="text-sm text-white">Daily Flights</div>
@@ -172,12 +176,12 @@ export default function Banner() {
 			<motion.div
 				className="absolute top-1/4 left-[10%] h-12 w-24 rounded-full bg-white/40 blur-xl"
 				animate={{ x: [0, 30, 0], opacity: [0.3, 0.5, 0.3] }}
-				transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }}
+				transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
 			/>
 			<motion.div
 				className="absolute top-1/3 right-[15%] h-16 w-32 rounded-full bg-white/30 blur-xl"
 				animate={{ x: [0, -40, 0], opacity: [0.2, 0.4, 0.2] }}
-				transition={{ duration: 10, repeat: Infinity, ease: 'easeInOut' }}
+				transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
 			/>
 		</div>
 	);
