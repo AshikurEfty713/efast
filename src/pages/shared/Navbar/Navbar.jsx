@@ -8,17 +8,23 @@ const Navbar = () => {
 	const navItems = (
 		<>
 			<li>
-				<NavLink to="/" className={"hover:bg-transparent"}>
+				<NavLink
+					to="/"
+					className={"hover:bg-transparent hover:text-orange-600"}>
 					Home
 				</NavLink>
 			</li>
 			<li>
-				<NavLink to="/about" className={"hover:bg-transparent"}>
+				<NavLink
+					to="/about"
+					className={"hover:bg-transparent hover:text-orange-600"}>
 					About Us
 				</NavLink>
 			</li>
 			<li>
-				<NavLink to="/coverage" className={"hover:bg-transparent"}>
+				<NavLink
+					to="/coverage"
+					className={"hover:bg-transparent hover:text-orange-600"}>
 					Coverage
 				</NavLink>
 			</li>
@@ -54,7 +60,7 @@ const Navbar = () => {
 				</div>
 
 				<div className="navbar-center hidden lg:flex">
-					<ul className="menu menu-horizontal px-1 text-xl font-semibold text-orange-500 hover:text-orange-600 ">
+					<ul className="menu menu-horizontal px-1 text-xl font-semibold text-orange-500  ">
 						{navItems}
 					</ul>
 				</div>
