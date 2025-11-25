@@ -45,7 +45,7 @@ const Bubble = ({ size, left, top, delay }) => {
 const Features = () => {
 
 	return (
-		<section className="py-16 relative">
+		<section className="py-16 relative max-w-7xl mx-auto">
 			<Bubble size={300} left="5%" top="10%" delay={0} />
 			<Bubble size={200} left="80%" top="20%" delay={2} />
 			<Bubble size={250} left="15%" top="70%" delay={4} />

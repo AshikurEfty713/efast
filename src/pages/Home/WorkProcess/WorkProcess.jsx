@@ -8,7 +8,7 @@ import { LuHandHeart } from 'react-icons/lu';
 
 export default function WorkProcess() {
     return (
-        <div className="min-h-screen bg-white">
+        <div className="min-h-screen bg-white max-w-7xl mx-auto">
             {/* Hero Section */}
             <div className="relative overflow-hidden bg-gradient-to-br from-yellow-50 to-orange-50 py-16">
                 <div className="container mx-auto px-4">

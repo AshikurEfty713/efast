@@ -5,6 +5,9 @@ import BrandSlider from "../Brand/BrandSlider";
 import Features from "../Features/Features";
 import BeMerchant from "../BeMerchant/BeMerchant";
 import WorkProcess from "../WorkProcess/WorkProcess";
+import { PopularPlace } from "../PopularPlace/PopularPlace";
+import ReadyToStart from "../ReadyToStart/ReadyToStart";
+import ExploreCompany from "../ExploreCompany/ExploreCompany";
 
 const Home = () => {
 	return (
@@ -13,8 +16,11 @@ const Home = () => {
 			<ServiceSection></ServiceSection>
 			<BrandSlider></BrandSlider>
 			<Features></Features>
+			<ExploreCompany></ExploreCompany>
 			<WorkProcess></WorkProcess>
 			<BeMerchant></BeMerchant>
+			<PopularPlace></PopularPlace>
+			<ReadyToStart></ReadyToStart>
 		</div>
 	);
 };

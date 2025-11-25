@@ -13,7 +13,7 @@ const BrandSlider = () => {
 	const logos = [logo1, logo2, logo3, logo4, logo5, logo6, logo7];
 
 	return (
-		<section className="py-10">
+		<section className="py-10 max-w-7xl mx-auto">
 			<div className="text-center mb-8">
 				<h2 className="text-2xl font-bold text-primary">Our Clients</h2>
 				<p className="text-sm text-gray-500">
