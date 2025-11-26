@@ -27,8 +27,10 @@ const Register = () => {
 		<div>
 			<form onSubmit={handleSubmit(formSubmit)}>
 				<div className="card bg-base-100 w-full max-w-sm shrink-0 shadow-2xl">
-					<div className="card-body">
-						<h1 className="text-4xl font-bold">Create An Account</h1>
+					<div className="card-body p-4 lg:p-10">
+						<h1 className="lg:text-4xl text-3xl font-bold">
+							Create An Account
+						</h1>
 						<fieldset className="fieldset">
 							<label className="label">Email</label>
 							<input
@@ -55,7 +57,7 @@ const Register = () => {
 									Password enter 6 characters or longer
 								</p>
 							)}
-							<button className="btn bg-orange-500 text-white rounded-full mt-4">
+							<button className="btn bg-orange-500 lg:text-base text-sm text-white rounded-full lg:mt-4 mt-2">
 								Register
 							</button>
 							<div>

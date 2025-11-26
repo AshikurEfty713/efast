@@ -3,7 +3,7 @@ import { BsTruck } from "react-icons/bs";
 import { CgAddR } from "react-icons/cg";
 import { FaDollarSign } from "react-icons/fa6";
 import { LuHandHeart } from "react-icons/lu";
-import personImg1 from '../../../assets/person/personimg1.png'
+import personImg1 from "../../../assets/person/personimg1.png";
 
 export default function WorkProcess() {
 	return (
@@ -15,7 +15,7 @@ export default function WorkProcess() {
 						<div className="flex-1">
 							<h1 className="text-center mb-6">Join Our Fleet!!!</h1>
 							<div className="flex justify-center">
-								<button className="btn btn-warning bg-orange-500 border-none hover:bg-yellow-500 text-gray-800 px-8">
+								<button className="btn btn-warning bg-orange-500 border-none hover:bg-yellow-500 text-white px-8">
 									Register Now
 								</button>
 							</div>

@@ -14,10 +14,10 @@ const Login = () => {
 		console.log(data);
 	};
 	return (
-		<div>
+		<div className="w-full">
 			<form onSubmit={handleSubmit(formSubmit)}>
 				<div className="card bg-base-100 w-full max-w-sm shrink-0 shadow-2xl">
-					<div className="card-body">
+					<div className="card-body p-4 lg:p-10">
 						<h1 className="text-4xl font-bold">Login</h1>
 						<fieldset className="fieldset">
 							<label className="label">Email</label>
@@ -53,8 +53,8 @@ const Login = () => {
 							</div>
 						</fieldset>
 
-						<div className="flex gap-10 items-baseline">
-							<button className="btn bg-orange-500 text-white rounded-full px-7 mt-4">
+						<div className="lg:flex lg:gap-6 items-baseline">
+							<button className="lg:btn bg-orange-500 text-sm lg:text-base text-white rounded-full lg:px-7 px-5 py-1 lg:mt-4 mt-0 mb-2 lg:mb-0">
 								Login
 							</button>
 							<p>

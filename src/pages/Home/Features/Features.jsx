@@ -28,25 +28,25 @@ const features = [
 const Bubble = ({ size, left, top, delay }) => {
 	return (
 		<div
-			className="absolute rounded-full bg-linear-to-br from-orange-500/20 to-orange-500/10 animate-float blur-xl"
+			className="absolute rounded-full bg-orange-500/10 animate-float blur-xl"
 			style={{
-				width: `${size}px`,
-				height: `${size}px`,
+				width: `clamp(${size * 0.4}px, ${size * 0.6}px, ${size}px)`,
+				height: `clamp(${size * 0.4}px, ${size * 0.6}px, ${size}px)`,
 				left,
 				top,
 				animationDelay: `${delay}s`,
-				animationDuration: `${8 + Math.random() * 4}s`,
+				animationDuration: `clamp(6s, 10s, ${10 + Math.random() * 4}s)`,
 			}}
 		/>
 	);
 };
 const Features = () => {
 	return (
-		<section className="py-16 relative max-w-7xl mx-auto">
+		<section className="py-16 relative lg:max-w-7xl mx-auto">
 			<Bubble size={300} left="5%" top="10%" delay={0} />
-			<Bubble size={200} left="80%" top="20%" delay={2} />
+			<Bubble size={200} left="54%" top="20%" delay={2} />
 			<Bubble size={250} left="15%" top="70%" delay={4} />
-			<Bubble size={180} left="85%" top="75%" delay={1} />
+			<Bubble size={180} left="65%" top="75%" delay={1} />
 			<Bubble size={220} left="50%" top="50%" delay={3} />
 			<Bubble size={150} left="70%" top="5%" delay={5} />
 
@@ -96,17 +96,32 @@ const Features = () => {
 				@keyframes float {
 					0%,
 					100% {
-						transform: translateY(0) translateX(0) scale(1);
+						transform: translate(0, 0) scale(1);
 					}
-					33% {
-						transform: translateY(-30px) translateX(20px) scale(1.1);
-					}
-					66% {
-						transform: translateY(-15px) translateX(-20px) scale(0.9);
+					50% {
+						transform: translate(-10px, -25px) scale(1.05);
 					}
 				}
-				.animate-float {
-					animation: float 10s ease-in-out infinite;
+
+				/* mobile-friendly */
+				@media (max-width: 640px) {
+					.animate-float {
+						animation-duration: 7s !important;
+					}
+				}
+
+				/* tablet */
+				@media (min-width: 641px) and (max-width: 1024px) {
+					.animate-float {
+						animation-duration: 9s !important;
+					}
+				}
+
+				/* desktop */
+				@media (min-width: 1025px) {
+					.animate-float {
+						animation-duration: 12s !important;
+					}
 				}
 			`}</style>
 		</section>

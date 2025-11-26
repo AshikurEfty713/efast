@@ -39,7 +39,7 @@ const Navbar = () => {
 	);
 	return (
 		<div className="sticky top-0 left-0 right-0 z-50">
-			<div className="navbar max-w-7xl mx-auto bg-gray-100/10 backdrop-blur-sm shadow-xl rounded-full px-6 py-3 mt-4">
+			<div className="navbar max-w-7xl mx-auto bg-gray-100/10 backdrop-blur-sm shadow-xl rounded-full px-6 lg:py-3 py-0 mt-4">
 				<div className="navbar-start">
 					<div className="dropdown">
 						<div tabIndex={0} role="button" className="btn btn-ghost lg:hidden">
@@ -75,7 +75,7 @@ const Navbar = () => {
 				<div className="navbar-end ">
 					<Link
 						to="login"
-						className="border px-6 py-1 text-xl text-gray-700 rounded-full cursor-pointer">
+						className="border lg:px-6 px-4 py-0 lg:text-xl tex-sm text-orange-500 rounded-full cursor-pointer">
 						login
 					</Link>
 				</div>

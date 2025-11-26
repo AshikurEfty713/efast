@@ -147,10 +147,10 @@ export default function Banner() {
 				animate={{ y: 0, opacity: 1 }}
 				transition={{ duration: 1, delay: 0.5 }}>
 				<h1 className="text-shadow-lg mb-2 text-6xl font-semibold tracking-wider text-white mt-34">
-					Global Dreams Await
+					Trust Track Deliveries
 				</h1>
 				<p className="text-shadow-lg text-xl text-white/90">
-					Connecting the world, one flight at a time
+					Transparent, secure, and always on time
 				</p>
 			</motion.div>
 
