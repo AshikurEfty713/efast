@@ -23,6 +23,13 @@ const Navbar = () => {
 			</li>
 			<li>
 				<NavLink
+					to="/services"
+					className={"hover:bg-transparent hover:text-orange-600"}>
+					Services
+				</NavLink>
+			</li>
+			<li>
+				<NavLink
 					to="/coverage"
 					className={"hover:bg-transparent hover:text-orange-600"}>
 					Coverage
@@ -32,7 +39,7 @@ const Navbar = () => {
 	);
 	return (
 		<div className="sticky top-0 left-0 right-0 z-50">
-			<div className="navbar max-w-7xl mx-auto bg-gray-100/10 backdrop-blur-sm shadow-xl rounded-full px-6 py-4 mt-4">
+			<div className="navbar max-w-7xl mx-auto bg-gray-100/10 backdrop-blur-sm shadow-xl rounded-full px-6 py-3 mt-4">
 				<div className="navbar-start">
 					<div className="dropdown">
 						<div tabIndex={0} role="button" className="btn btn-ghost lg:hidden">
@@ -60,7 +67,7 @@ const Navbar = () => {
 				</div>
 
 				<div className="navbar-center hidden lg:flex">
-					<ul className="menu menu-horizontal px-1 text-xl font-semibold text-orange-500  ">
+					<ul className="menu menu-horizontal px-1 text-xl font-regular text-orange-500  ">
 						{navItems}
 					</ul>
 				</div>

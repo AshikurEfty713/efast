@@ -28,7 +28,7 @@ const features = [
 const Bubble = ({ size, left, top, delay }) => {
 	return (
 		<div
-			className="absolute rounded-full bg-linear-to-br from-lime-500/20 to-lime-500/10 animate-float blur-xl"
+			className="absolute rounded-full bg-linear-to-br from-orange-500/20 to-orange-500/10 animate-float blur-xl"
 			style={{
 				width: `${size}px`,
 				height: `${size}px`,

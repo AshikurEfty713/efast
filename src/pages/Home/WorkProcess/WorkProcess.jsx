@@ -3,14 +3,13 @@ import { BsTruck } from "react-icons/bs";
 import { CgAddR } from "react-icons/cg";
 import { FaDollarSign } from "react-icons/fa6";
 import { LuHandHeart } from "react-icons/lu";
-// import { HandHeart, Truck, Car, DollarSign } from 'lucide-react';
-// import deliveryImage from 'figma:asset/f2f7fee0831bd1fc9c02f3168b95df47238eede2.png';
+import personImg1 from '../../../assets/person/personimg1.png'
 
 export default function WorkProcess() {
 	return (
 		<div className="min-h-screen bg-white max-w-7xl mx-auto">
 			{/* Hero Section */}
-			<div className="relative overflow-hidden bg-linear-to-br from-yellow-50 to-orange-50 py-16">
+			<div className="relative overflow-hidden bg-linear-to-br from-yellow-50 to-orange-50  rounded-4xl">
 				<div className="container mx-auto px-4">
 					<div className="flex items-center justify-between">
 						<div className="flex-1">
@@ -23,9 +22,9 @@ export default function WorkProcess() {
 						</div>
 						<div className="flex-1 flex justify-end">
 							<img
-								// src={deliveryImage}
+								src={personImg1}
 								alt="Delivery person on scooter"
-								className="w-64 h-auto object-contain"
+								className="w-full object-contain"
 							/>
 						</div>
 					</div>

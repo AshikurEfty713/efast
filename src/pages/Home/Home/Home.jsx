@@ -8,11 +8,15 @@ import WorkProcess from "../WorkProcess/WorkProcess";
 import { PopularPlace } from "../PopularPlace/PopularPlace";
 import ReadyToStart from "../ReadyToStart/ReadyToStart";
 import ExploreCompany from "../ExploreCompany/ExploreCompany";
+import AboutUs from "../../AboutUs/AboutUs";
+import TransportForm from "../TransportForm/TransportForm";
 
 const Home = () => {
 	return (
 		<div>
 			<Banner></Banner>
+			<TransportForm></TransportForm>
+			<AboutUs></AboutUs>
 			<ServiceSection></ServiceSection>
 			<BrandSlider></BrandSlider>
 			<Features></Features>

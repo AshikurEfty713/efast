@@ -32,8 +32,42 @@ export default function BangladeshMap({ branches }) {
 		}
 	};
 	return (
-		<div className="w-full h-[600px] rounded-xl overflow-hidden shadow-lg">
-			<div className=" p-5">
+		<div className="w-full h-full-screen rounded-xl overflow-hidden">
+			<div className="bg-gradient-to-br from-orange-400 to-orange-600 rounded-3xl px-8 py-12 md:py-16">
+				<div className="flex flex-col items-center text-center">
+					<h1 className="text-white mb-4 text-3xl md:text-4xl font-bold">
+						We are available in{" "}
+						<span className="text-transparent bg-clip-text bg-gradient-to-r from-lime-100 via-lime-300 to-yellow-300">
+							{branches.length} districts
+						</span>
+					</h1>
+
+					<p className="text-blue-100 max-w-2xl mb-8 text-base md:text-lg">
+						Explore our extensive network across Bangladesh. Search for your district to find the nearest branch.
+					</p>
+
+					{/* Search Bar */}
+					<form onSubmit={handleSearch} className="w-full max-w-xl">
+						<div className="relative">
+							<input
+								type="search"
+								required
+								placeholder="Search for your district..."
+								value={searchText}
+								onChange={(e) => setSearchText(e.target.value)}
+								className="w-full px-6 py-4 text-base rounded-2xl bg-white/10 backdrop-blur-md border border-white/20 text-white placeholder:text-white/100 focus:outline-none focus:ring-2 focus:ring-white/50 transition-all"
+							/>
+							<button
+								type="submit"
+								className="absolute right-2 top-1/2 -translate-y-1/2 bg-gradient-to-r from-orange-400 to-orange-500 hover:from-orange-500 hover:to-orange-400 text-white px-6 py-2.5 rounded-xl transition-all duration-300 text-sm font-medium shadow-sm cursor-pointer"
+							>
+								Search
+							</button>
+						</div>
+					</form>
+				</div>
+			</div>
+			{/* <div className=" p-5">
 				<form onSubmit={handleSearch}>
 					<label className="input">
 						<svg
@@ -59,32 +93,34 @@ export default function BangladeshMap({ branches }) {
 						/>
 					</label>
 				</form>
-			</div>
+			</div> */}
 			{/* map container  */}
-			<MapContainer
-				center={[23.685, 90.3563]}
-				zoom={7}
-				scrollWheelZoom={true}
-				className="h-full w-full">
-				<TileLayer
-					url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-					attribution="© OpenStreetMap contributors"
-				/>
+			<div className="h-[650px] mt-5">
+				<MapContainer
+					center={[23.685, 90.3563]}
+					zoom={7}
+					scrollWheelZoom={true}
+					className="h-full w-full rounded-3xl">
+					<TileLayer
+						url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+						attribution="© OpenStreetMap contributors"
+					/>
 
-				<FlyToDistrict coords={activeCoords}></FlyToDistrict>
+					<FlyToDistrict coords={activeCoords}></FlyToDistrict>
 
-				{branches.map((branch, index) => (
-					<Marker
-						key={index}
-						position={[branch.latitude, branch.longitude]}
-						icon={customIcon}>
-						<Popup autoOpen={branch.district === activeDistrict}>
-							<strong>{branch.city}</strong> — Coverage Available <br />
-							Area: {branch.covered_area.join(",")}
-						</Popup>
-					</Marker>
-				))}
-			</MapContainer>
+					{branches.map((branch, index) => (
+						<Marker
+							key={index}
+							position={[branch.latitude, branch.longitude]}
+							icon={customIcon}>
+							<Popup autoOpen={branch.district === activeDistrict}>
+								<strong>{branch.city}</strong> — Coverage Available <br />
+								Area: {branch.covered_area.join(",")}
+							</Popup>
+						</Marker>
+					))}
+				</MapContainer>
+			</div>
 		</div>
 	);
 }
