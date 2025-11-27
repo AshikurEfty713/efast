@@ -35,6 +35,13 @@ const Navbar = () => {
 					Coverage
 				</NavLink>
 			</li>
+			<li>
+				<NavLink
+					to="/sendParcel"
+					className={"hover:bg-transparent hover:text-orange-600"}>
+					Send Parcel
+				</NavLink>
+			</li>
 		</>
 	);
 	return (

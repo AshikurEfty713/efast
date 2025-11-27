@@ -15,7 +15,7 @@ export default function WorkProcess() {
 						<div className="flex-1">
 							<h1 className="text-center mb-6">Join Our Fleet!!!</h1>
 							<div className="flex justify-center">
-								<button className="btn btn-warning bg-orange-500 border-none hover:bg-yellow-500 text-white px-8">
+								<button className="btn btn-warning bg-orange-500 border-none hover:bg-orange-600 text-white px-8">
 									Register Now
 								</button>
 							</div>

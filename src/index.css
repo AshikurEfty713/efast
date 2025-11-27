@@ -18,3 +18,17 @@
   font-weight:400;
   font-style: normal;
 }
+
+/* service card bubble animation */
+@keyframes floatUp {
+  to {
+    transform: translateY(-400px) translateX(30px);
+    opacity: 0;
+  }
+}
+
+@layer utilities {
+  .animate-bubble {
+    animation: floatUp 0.3s ease-in forwards;
+  }
+}
