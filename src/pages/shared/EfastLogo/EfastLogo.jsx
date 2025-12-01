@@ -6,7 +6,7 @@ const EfastLogo = () => {
 		<Link to="/" className="flex gap-1 items-center">
 			<img className="h-6 lg:h-full" src={logoImg} alt="" />
 			<h5 className="lg:text-2xl text-base font-semibold text-orange-500">
-				Efast
+				Trackfast
 			</h5>
 		</Link>
 	);

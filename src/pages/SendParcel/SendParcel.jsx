@@ -2,11 +2,20 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-hot-toast";
 import BranchesHooks from "../../hooks/branchesHooks";
-import { data } from "react-router";
+import Swal from "sweetalert2";
+import useAuth from "../../hooks/useAuth";
+import axios from "axios";
+
+const generateTrackingID = () => {
+	const date = new Date();
+	const datePart = date.toISOString().split("T")[0].replace(/-/g, "");
+	const rand = Math.random().toString(36).substring(2, 7).toUpperCase();
+	return `PCL-${datePart}-${rand}`;
+};
 
 export default function SendParcel() {
 	const branches = BranchesHooks();
-	console.log(branches);
+	const { user } = useAuth();
 	const { register, handleSubmit, watch, reset } = useForm({
 		defaultValues: {
 			type: "document",
@@ -14,65 +23,161 @@ export default function SendParcel() {
 	});
 
 	const parcelType = watch("type");
-	const [showConfirm, setShowConfirm] = useState(false);
-	const [calculatedCost, setCalculatedCost] = useState(0);
 	const [finalData, setFinalData] = useState(null);
 
-	const serviceCenterPrice = {
-		dhaka: 60,
-		chattogram: 80,
-		rajshahi: 70,
-		barishal: 75,
-		sylhet: 85,
-		khulna: 70,
-		rangpur: 65,
-	};
+	// Unique Regions
+	const uniqueRegions = [...new Set(branches.map((b) => b.region))];
 
-	const calculateCost = (type, region, weight) => {
-		let base = serviceCenterPrice[region] || 50;
-
-		if (type === "non-document") {
-			const extra = weight ? weight * 10 : 0;
-			return base + extra;
-		}
-		return base;
-	};
-
-	const uniqueRegions = [...new Set(branches.map((data) => data.region))];
-
+	// Get District by Region
 	const getDistrictByRegion = (region) => {
-		return branches
-			.filter((data) => data.region === region)
-			.map((data) => data.district);
+		return branches.filter((b) => b.region === region).map((b) => b.district);
 	};
 
 	const senderRegionItem = watch("senderRegion");
 	const receiverRegionItem = watch("receiverRegion");
 
-	const onSubmit = (data) => {
-		const { type, receiverRegion, weight } = data;
+	// ======================
+	// ⭐ PRICE CALCULATION
+	// ======================
+	const calculateCost = (type, senderCenter, receiverCenter, weight = 0) => {
+		const isWithinDistrict = senderCenter === receiverCenter;
 
-		const cost = calculateCost(type, receiverRegion, weight);
-		setCalculatedCost(cost);
-		setFinalData(data);
+		if (type === "document") {
+			return isWithinDistrict ? 60 : 80;
+		}
 
-		setShowConfirm(true);
-		toast.success(`Estimated Delivery Cost: ৳${cost}`);
+		let base = isWithinDistrict ? 110 : 150;
+		let extra = weight > 3 ? (weight - 3) * 40 : 0;
+		let districtExtra = isWithinDistrict ? 0 : 40;
+
+		return base + extra + districtExtra;
 	};
 
-	const confirmParcel = () => {
+	// ======================
+	// FORM SUBMIT
+	// ======================
+	const onSubmit = (data) => {
+		const { type, senderCenter, receiverCenter, weight } = data;
+
+		const isWithinDistrict = senderCenter === receiverCenter;
+		const cost = calculateCost(type, senderCenter, receiverCenter, weight);
+
+		// Breakdown Values
+		const baseCost =
+			type === "document"
+				? isWithinDistrict
+					? 60
+					: 80
+				: isWithinDistrict
+				? 110
+				: 150;
+
+		const extraKg = type === "non-document" && weight > 3 ? weight - 3 : 0;
+		const extraCost = extraKg > 0 ? extraKg * 40 : 0;
+
+		const districtCharge =
+			type === "non-document" && !isWithinDistrict ? 40 : 0;
+
+		// SweetAlert2 Breakdown
+		Swal.fire({
+			title: "Delivery Cost Breakdown",
+			icon: "info",
+			html: `
+				<div style="text-align:left; font-size:15px; line-height:1.6; margin-top:10px;">
+					
+					<b>Parcel Type:</b> ${type}<br/>
+					<b>Weight:</b> ${weight ? weight + " kg" : "N/A"}<br/>
+					<b>Delivery Zone:</b> ${
+						isWithinDistrict ? "Inside District" : "Outside District"
+					}<br/>
+
+					<hr style="margin:10px 0;" />
+
+					<b>Base Cost:</b> ৳${baseCost}
+
+					<hr style="margin:10px 0;" />
+
+					<b>Extra Charges:</b> ৳${extraCost + districtCharge}
+
+					<div style="font-size:14px; color:#555; margin-top:6px;">
+						${
+							type === "non-document" && extraKg > 0
+								? `
+							Non-document over 3kg ${
+								isWithinDistrict ? "inside" : "outside"
+							} the district.<br/>
+							Extra charge: ৳40 × ${extraKg}kg = ৳${extraCost}<br/>
+							${districtCharge ? "+ ৳40 extra for outside district delivery" : ""}
+						  `
+								: "No extra weight charge."
+						}
+					</div>
+
+					<hr style="margin:12px 0;" />
+
+					<b style="font-size:20px; color:#0f9d58;">
+						Total Cost: ৳${cost}
+					</b>
+				</div>
+			`,
+			showCancelButton: true,
+			confirmButtonText: "Proceed to Payment",
+			cancelButtonText: "Continue Editing",
+			confirmButtonColor: "#2ecc71",
+			cancelButtonColor: "#ff6900",
+			width: 550,
+			padding: "1.5rem 1rem",
+		}).then((result) => {
+			if (result.isConfirmed) {
+				confirmParcel(data, cost);
+			}
+		});
+	};
+
+	// ======================
+	// CONFIRM PARCEL
+	// ======================
+	const API_URL = import.meta.env.VITE_apiUrl;
+	const confirmParcel = async (data, cost) => {
+		if (!user || !user.email) {
+			Swal.fire({
+				icon: "warning",
+				title: "Login required",
+				text: "Please log in to create a parcel.",
+			});
+			return;
+		}
+
 		const parcelData = {
-			...finalData,
-			creation_date: new Date().toISOString(),
+			...data,
+			totalCost: cost,
+			createdBy: user.email, // typo: "cretatedBy" → "createdBy"
+			paymentStatus: "unpaid", // typo: "peymentStatus" → "paymentStatus"
+			deliveryStatus: "not_collected",
+			creationDate: new Date().toISOString(),
+			trackingId: generateTrackingID(),
 		};
 
-		console.log("Saving to DB:", parcelData);
+		try {
+			const response = await axios.post(
+				`${API_URL}/parcel`, // তোমার API URL
+				parcelData
+			);
 
-		toast.success("Parcel Created Successfully!");
-		setShowConfirm(false);
-		reset();
+			if (response.data.success) {
+				toast.success("Parcel Created Successfully!");
+				reset();
+			} else {
+				toast.error("Failed to create parcel!");
+			}
+		} catch (error) {
+			console.error("API error:", error);
+			toast.error(error.response?.data?.message || "Server error!");
+		}
 	};
-
+	// ======================
+	// MAIN UI
+	// ======================
 	return (
 		<div className="max-w-7xl mx-auto p-6">
 			<h1 className="text-3xl font-bold mb-1">Add Parcel</h1>
@@ -82,53 +187,24 @@ export default function SendParcel() {
 
 			<form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
 				{/* PARCEL INFO */}
-				{/* <div className="border rounded-xl p-5 shadow-sm">
+				<div className="rounded-xl p-5 shadow-md">
 					<h2 className="text-xl font-semibold mb-4">Parcel Info</h2>
 
 					<div className="grid md:grid-cols-3 gap-5">
+						{/* Parcel Name */}
 						<div className="form-control">
-							<label className="label">Parcel Type</label>
-							<select
-								{...register("type")}
-								className="select select-bordered"
-								required>
-								<option value="document">Document</option>
-								<option value="non-document">Non-Document</option>
-							</select>
-						</div>
-
-						<div className="form-control">
-							<label className="label block">Title</label>
+							<label className="label block">Parcel Name</label>
 							<input
 								type="text"
-								{...register("title", { required: true })}
+								{...register("parcelName", { required: true })}
 								className="input input-bordered"
 							/>
 						</div>
 
-						{parcelType === "non-document" && (
-							<div className="form-control">
-								<label className="label">Weight (kg)</label>
-								<input
-									type="number"
-									min="0"
-									step="0.1"
-									{...register("weight")}
-									className="input input-bordered"
-								/>
-							</div>
-						)}
-					</div>
-				</div> */}
-				<div className="border rounded-xl p-5 shadow-sm">
-					<h2 className="text-xl font-semibold mb-4">Parcel Info</h2>
-
-					<div className="grid md:grid-cols-3 gap-5">
-						{/* RADIO BUTTONS */}
+						{/* Parcel Type */}
 						<div className="form-control">
 							<label className="label">Parcel Type</label>
-
-							<div className="flex items-center gap-4 mt-1">
+							<div className="flex flex-wrap items-center gap-4 mt-1">
 								<label className="flex items-center gap-2 cursor-pointer">
 									<input
 										type="radio"
@@ -151,36 +227,25 @@ export default function SendParcel() {
 							</div>
 						</div>
 
-						{/* TITLE */}
+						{/* Weight */}
 						<div className="form-control">
-							<label className="label block">Parcel Name</label>
+							<label className="label">Weight (kg)</label>
 							<input
-								type="text"
-								{...register("parcelName", { required: true })}
+								type="number"
+								min="0"
+								step="0.1"
+								{...register("weight")}
+								disabled={parcelType !== "non-document"}
 								className="input input-bordered"
 							/>
 						</div>
-
-						{/* SHOW WEIGHT ONLY IF NON-DOCUMENT */}
-						{watch("type") === "non-document" && (
-							<div className="form-control">
-								<label className="label">Weight (kg)</label>
-								<input
-									type="number"
-									min="0"
-									step="0.1"
-									{...register("weight")}
-									className="input input-bordered"
-								/>
-							</div>
-						)}
 					</div>
 				</div>
 
 				{/* SENDER + RECEIVER */}
-				<div className="grid grid-cols-2 gap-5">
+				<div className="grid lg:grid-cols-2 grid-cols-1 gap-5">
 					{/* SENDER */}
-					<div className="border rounded-xl p-5 shadow-sm">
+					<div className="rounded-xl p-5 shadow-xl">
 						<h2 className="text-xl font-semibold mb-4">Sender Information</h2>
 
 						<div className="grid md:grid-cols-2 gap-5">
@@ -202,37 +267,38 @@ export default function SendParcel() {
 								/>
 							</div>
 
+							{/* Sender Region */}
 							<div className="form-control">
 								<label className="label">Select Region</label>
 								<select
 									{...register("senderRegion", { required: true })}
-									className="select select-bordered">
+									className="select select-bordered cursor-pointer">
 									<option value="">Choose Region</option>
-									{uniqueRegions.map((regionData, index) => (
-										<option key={index} value={regionData}>
+									{uniqueRegions.map((regionData, i) => (
+										<option key={i} value={regionData}>
 											{regionData}
 										</option>
 									))}
 								</select>
 							</div>
 
+							{/* Sender Center */}
 							<div className="form-control">
 								<label className="label">Select Service Center</label>
 								<select
 									{...register("senderCenter", { required: true })}
-									className="select select-bordered">
+									className="select select-bordered cursor-pointer">
 									<option value="">Choose center</option>
 									{senderRegionItem &&
-										getDistrictByRegion(senderRegionItem).map(
-											(district, index) => (
-												<option key={index} value={district}>
-													{district}
-												</option>
-											)
-										)}
+										getDistrictByRegion(senderRegionItem).map((district, i) => (
+											<option key={i} value={district}>
+												{district}
+											</option>
+										))}
 								</select>
 							</div>
 
+							{/* Sender Address */}
 							<div className="form-control md:col-span-2">
 								<label className="label block">Address</label>
 								<textarea
@@ -241,6 +307,7 @@ export default function SendParcel() {
 								/>
 							</div>
 
+							{/* Pickup Instruction */}
 							<div className="form-control md:col-span-2">
 								<label className="label block">Pick Up Instruction</label>
 								<textarea
@@ -252,7 +319,7 @@ export default function SendParcel() {
 					</div>
 
 					{/* RECEIVER */}
-					<div className="border rounded-xl p-5 shadow-sm">
+					<div className="rounded-xl p-5 shadow-xl">
 						<h2 className="text-xl font-semibold mb-4">Receiver Information</h2>
 
 						<div className="grid md:grid-cols-2 gap-5">
@@ -266,7 +333,7 @@ export default function SendParcel() {
 							</div>
 
 							<div className="form-control">
-								<label className="label block">Contact Nunber</label>
+								<label className="label block">Contact Number</label>
 								<input
 									type="text"
 									{...register("receiverContact", { required: true })}
@@ -274,30 +341,32 @@ export default function SendParcel() {
 								/>
 							</div>
 
+							{/* Receiver Region */}
 							<div className="form-control">
 								<label className="label">Select Region</label>
 								<select
 									{...register("receiverRegion", { required: true })}
-									className="select select-bordered">
+									className="select select-bordered cursor-pointer">
 									<option value="">Choose Region</option>
-									{uniqueRegions.map((regionData, index) => (
-										<option key={index} value={regionData}>
+									{uniqueRegions.map((regionData, i) => (
+										<option key={i} value={regionData}>
 											{regionData}
 										</option>
 									))}
 								</select>
 							</div>
 
+							{/* Receiver Center */}
 							<div className="form-control">
 								<label className="label">Select Service Center</label>
 								<select
 									{...register("receiverCenter", { required: true })}
-									className="select select-bordered">
+									className="select select-bordered cursor-pointer">
 									<option value="">Choose center</option>
 									{receiverRegionItem &&
 										getDistrictByRegion(receiverRegionItem).map(
-											(district, index) => (
-												<option key={index} value={district}>
+											(district, i) => (
+												<option key={i} value={district}>
 													{district}
 												</option>
 											)
@@ -305,6 +374,7 @@ export default function SendParcel() {
 								</select>
 							</div>
 
+							{/* Receiver Address */}
 							<div className="form-control md:col-span-2">
 								<label className="label block">Address</label>
 								<textarea
@@ -313,6 +383,7 @@ export default function SendParcel() {
 								/>
 							</div>
 
+							{/* Delivery Instruction */}
 							<div className="form-control md:col-span-2">
 								<label className="label block">Delivery Instruction</label>
 								<textarea
@@ -328,28 +399,6 @@ export default function SendParcel() {
 					Submit Parcel
 				</button>
 			</form>
-
-			{/* Confirm Modal */}
-			{showConfirm && (
-				<div className="modal modal-open">
-					<div className="modal-box">
-						<h3 className="font-bold text-lg mb-3">Confirm Parcel</h3>
-						<p className="mb-4">
-							Delivery Cost:{" "}
-							<span className="font-semibold">৳{calculatedCost}</span>
-						</p>
-
-						<div className="modal-action">
-							<button className="btn" onClick={() => setShowConfirm(false)}>
-								Cancel
-							</button>
-							<button className="btn btn-primary" onClick={confirmParcel}>
-								Confirm
-							</button>
-						</div>
-					</div>
-				</div>
-			)}
 		</div>
 	);
 }
