@@ -1,10 +1,11 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { toast } from "react-hot-toast";
+import { toast, Toaster } from "react-hot-toast";
 import BranchesHooks from "../../hooks/branchesHooks";
 import Swal from "sweetalert2";
 import useAuth from "../../hooks/useAuth";
 import axios from "axios";
+import useAxiosSecure from "../../hooks/useAxiosSecure";
 
 const generateTrackingID = () => {
 	const date = new Date();
@@ -15,6 +16,7 @@ const generateTrackingID = () => {
 
 export default function SendParcel() {
 	const branches = BranchesHooks();
+	const axiosSecure = useAxiosSecure();
 	const { user } = useAuth();
 	const { register, handleSubmit, watch, reset } = useForm({
 		defaultValues: {
@@ -137,7 +139,6 @@ export default function SendParcel() {
 	// ======================
 	// CONFIRM PARCEL
 	// ======================
-	const API_URL = import.meta.env.VITE_apiUrl;
 	const confirmParcel = async (data, cost) => {
 		if (!user || !user.email) {
 			Swal.fire({
@@ -159,13 +160,11 @@ export default function SendParcel() {
 		};
 
 		try {
-			const response = await axios.post(
-				`${API_URL}/parcel`, // তোমার API URL
-				parcelData
-			);
+			const response = await axiosSecure.post("/parcels", parcelData);
 
 			if (response.data.success) {
 				toast.success("Parcel Created Successfully!");
+				console.log(response.data);
 				reset();
 			} else {
 				toast.error("Failed to create parcel!");
@@ -391,6 +390,7 @@ export default function SendParcel() {
 									className="textarea textarea-bordered w-full"
 								/>
 							</div>
+							<Toaster position="top-right" />
 						</div>
 					</div>
 				</div>
