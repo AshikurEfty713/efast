@@ -3,8 +3,10 @@ import { NavLink } from "react-router";
 import logoImg from "../../../assets/others/logo.png";
 import EfastLogo from "../EfastLogo/EfastLogo";
 import { Link } from "react-router";
+import useAuth from "../../../hooks/useAuth";
 
 const Navbar = () => {
+	const { user } = useAuth();
 	const navItems = (
 		<>
 			<li>
@@ -35,6 +37,19 @@ const Navbar = () => {
 					Coverage
 				</NavLink>
 			</li>
+
+			{user && (
+				<>
+					<li>
+						<NavLink
+							to="/dashboard"
+							className={"hover:bg-transparent hover:text-orange-600"}>
+							Dashboard
+						</NavLink>
+					</li>
+				</>
+			)}
+
 			<li>
 				<NavLink
 					to="/sendParcel"
