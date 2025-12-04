@@ -11,6 +11,13 @@ import PrivateRoute from "../routes/PrivateRoute";
 import SendParcel from "../pages/SendParcel/SendParcel";
 import DashboardLayout from "../layouts/DashboardLayout";
 import MyParcel from "../pages/Dashboard/MyParcel/MyParcel";
+import Accounts from "../pages/Dashboard/Accounts/Accounts";
+import Mobiru from "../pages/Dashboard/Mobiru/Mobiru";
+import Payments from "../pages/Dashboard/Payments/Payments";
+import Complaints from "../pages/Dashboard/Complaints/Complaints";
+import Supports from "../pages/Dashboard/Supports/Supports";
+import Track from "../pages/Dashboard/Track/Track";
+import Profile from "../pages/Dashboard/Profile/Profile";
 
 export const router = createBrowserRouter([
 	{
@@ -66,8 +73,36 @@ export const router = createBrowserRouter([
 		),
 		children: [
 			{
+				path: "",
+				Component: Profile,
+			},
+			{
 				path: "myParcel",
 				Component: MyParcel,
+			},
+			{
+				path: "track",
+				Component: Track,
+			},
+			{
+				path: "accounts",
+				Component: Accounts,
+			},
+			{
+				path: "mobiru",
+				Component: Mobiru,
+			},
+			{
+				path: "payments",
+				Component: Payments,
+			},
+			{
+				path: "complaints",
+				Component: Complaints,
+			},
+			{
+				path: "supports",
+				Component: Supports,
 			},
 		],
 	},

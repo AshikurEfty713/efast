@@ -1,21 +1,31 @@
-import react from 'react';
-import { Facebook, Twitter, Youtube, Award, Users, TrendingUp } from 'lucide-react';
+import react from "react";
+import {
+	Facebook,
+	Twitter,
+	Youtube,
+	Award,
+	Users,
+	TrendingUp,
+} from "lucide-react";
 
 export default function AboutUs() {
 	const features = [
-		{ icon: Award, label: 'Award Winning', value: '360+' },
-		{ icon: Users, label: 'Happy Clients', value: '12K+' },
-		{ icon: TrendingUp, label: 'Growth Rate', value: '95%' },
+		{ icon: Award, label: "Award Winning", value: "360+" },
+		{ icon: Users, label: "Happy Clients", value: "12K+" },
+		{ icon: TrendingUp, label: "Growth Rate", value: "95%" },
 	];
 
 	return (
 		<div id="about" className="relative py-24 px-4 bg-white overflow-hidden">
 			{/* Background Pattern */}
 			<div className="absolute inset-0 opacity-5">
-				<div className="absolute inset-0" style={{
-					backgroundImage: 'radial-gradient(circle at 2px 2px, #f97316 1px, transparent 0)',
-					backgroundSize: '40px 40px'
-				}}></div>
+				<div
+					className="absolute inset-0"
+					style={{
+						backgroundImage:
+							"radial-gradient(circle at 2px 2px, #f97316 1px, transparent 0)",
+						backgroundSize: "40px 40px",
+					}}></div>
 			</div>
 
 			<div className="container mx-auto max-w-7xl relative z-10">
@@ -23,30 +33,32 @@ export default function AboutUs() {
 					{/* Left Side - Content */}
 					<div className="space-y-6" data-aos="fade-right">
 						<div className="inline-block">
-							<span className="bg-gradient-to-r from-orange-100 to-orange-50 text-orange-600 px-6 py-2 rounded-full text-sm uppercase tracking-wider">
+							<span className="bg-linear-to-r from-orange-100 to-orange-50 text-orange-600 px-6 py-2 rounded-full text-sm uppercase tracking-wider">
 								About Us
 							</span>
 						</div>
 
 						<h2 className="text-5xl lg:text-6xl">
-							<span className="block bg-gradient-to-r from-orange-500 to-orange-600 bg-clip-text text-transparent">
+							<span className="block bg-linear-to-r from-orange-500 to-orange-600 bg-clip-text text-transparent">
 								TRANSPORT &
 							</span>
-							<span className="block bg-gradient-to-r from-orange-500 to-orange-600 bg-clip-text text-transparent">
+							<span className="block bg-linear-to-r from-orange-500 to-orange-600 bg-clip-text text-transparent">
 								LOGISTICS
 							</span>
 						</h2>
 
 						<div className="space-y-4 text-gray-700 text-lg leading-relaxed">
 							<p>
-								Proin gravida nibh vel velit auctor aliquet. Aenean sollicitudin, lorem quis bibendum auctor,
-								nisi elit consequat ipsum, nec sagittis sem nibh id elit. Duis sed odio sit amet nibh vulputate
-								cursus a sit amet mauris.
+								Proin gravida nibh vel velit auctor aliquet. Aenean
+								sollicitudin, lorem quis bibendum auctor, nisi elit consequat
+								ipsum, nec sagittis sem nibh id elit. Duis sed odio sit amet
+								nibh vulputate cursus a sit amet mauris.
 							</p>
 
 							<p>
-								Morbi accumsan ipsum velit. Nam nec tellus a odio tincidunt auctor a ornare odio.
-								Build your ideas at scale, Incididunt auctor sit nibh amet odio sed Duis.
+								Morbi accumsan ipsum velit. Nam nec tellus a odio tincidunt
+								auctor a ornare odio. Build your ideas at scale, Incididunt
+								auctor sit nibh amet odio sed Duis.
 							</p>
 						</div>
 
@@ -55,10 +67,9 @@ export default function AboutUs() {
 							{features.map((feature, index) => (
 								<div
 									key={index}
-									className="text-center p-4 rounded-2xl bg-gradient-to-br from-orange-50 to-white hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1"
-								>
+									className="text-center p-4 rounded-2xl bg-linear-to-br from-orange-50 to-white hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1">
 									<feature.icon className="w-8 h-8 text-orange-500 mx-auto mb-2" />
-									<div className="text-2xl bg-gradient-to-r from-orange-500 to-orange-600 bg-clip-text text-transparent mb-1">
+									<div className="text-2xl bg-linear-to-r from-orange-500 to-orange-600 bg-clip-text text-transparent mb-1">
 										{feature.value}
 									</div>
 									<div className="text-xs text-gray-600">{feature.label}</div>
@@ -70,20 +81,17 @@ export default function AboutUs() {
 						<div className="flex gap-4 pt-4">
 							<a
 								href="#"
-								className="btn btn-circle bg-gradient-to-br from-gray-900 to-black text-white border-0 hover:from-orange-500 hover:to-orange-600 transition-all duration-300 hover:scale-110 shadow-lg"
-							>
+								className="btn btn-circle bg-linear-to-br from-gray-900 to-black text-white border-0 hover:from-orange-500 hover:to-orange-600 transition-all duration-300 hover:scale-110 shadow-lg">
 								<Facebook className="w-5 h-5" />
 							</a>
 							<a
 								href="#"
-								className="btn btn-circle bg-gradient-to-br from-gray-900 to-black text-white border-0 hover:from-orange-500 hover:to-orange-600 transition-all duration-300 hover:scale-110 shadow-lg"
-							>
+								className="btn btn-circle bg-linear-to-br from-gray-900 to-black text-white border-0 hover:from-orange-500 hover:to-orange-600 transition-all duration-300 hover:scale-110 shadow-lg">
 								<Twitter className="w-5 h-5" />
 							</a>
 							<a
 								href="#"
-								className="btn btn-circle bg-gradient-to-br from-orange-500 to-orange-600 text-white border-0 hover:scale-110 transition-all duration-300 shadow-lg"
-							>
+								className="btn btn-circle bg-linear-to-br from-orange-500 to-orange-600 text-white border-0 hover:scale-110 transition-all duration-300 shadow-lg">
 								<Youtube className="w-5 h-5" />
 							</a>
 						</div>
@@ -99,7 +107,7 @@ export default function AboutUs() {
 										alt="Warehouse"
 										className="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-500"
 									/>
-									<div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
+									<div className="absolute inset-0 bg-linear-to-t from-black/50 to-transparent"></div>
 								</div>
 								<div className="relative group overflow-hidden rounded-2xl shadow-xl">
 									<img
@@ -107,7 +115,7 @@ export default function AboutUs() {
 										alt="Packages"
 										className="w-full h-48 object-cover group-hover:scale-110 transition-transform duration-500"
 									/>
-									<div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
+									<div className="absolute inset-0 bg-linear-to-t  from-black/50 to-transparent"></div>
 								</div>
 							</div>
 							<div className="space-y-4 pt-12">
@@ -117,7 +125,7 @@ export default function AboutUs() {
 										alt="Cargo"
 										className="w-full h-48 object-cover group-hover:scale-110 transition-transform duration-500"
 									/>
-									<div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
+									<div className="absolute inset-0 bg-linear-to-t from-black/50 to-transparent"></div>
 								</div>
 								<div className="relative group overflow-hidden rounded-2xl shadow-xl">
 									<img
@@ -125,14 +133,14 @@ export default function AboutUs() {
 										alt="Workers"
 										className="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-500"
 									/>
-									<div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
+									<div className="absolute inset-0 bg-linear-to-t from-black/50 to-transparent"></div>
 								</div>
 							</div>
 						</div>
 
 						{/* Floating Badge */}
 						<div className="absolute -bottom-6 -left-6 bg-white p-6 rounded-2xl shadow-2xl transform hover:scale-105 transition-transform duration-300">
-							<div className="text-4xl bg-gradient-to-r from-orange-500 to-orange-600 bg-clip-text text-transparent mb-1">
+							<div className="text-4xl bg-linear-to-r from-orange-500 to-orange-600 bg-clip-text text-transparent mb-1">
 								25+
 							</div>
 							<div className="text-sm text-gray-600">Years Experience</div>
