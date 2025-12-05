@@ -67,7 +67,7 @@ const Features = () => {
 						return (
 							<div
 								key={index}
-								className="group relative bg-card rounded-3xl p-8 shadow-lg hover:shadow-2xl transition-all duration-500 border border-border/50 hover:border-primary/30 hover:-translate-y-2">
+								className="group relative bg-card rounded-3xl p-8 shadow-lg hover:shadow-2xl transition-all duration-500 border border-border/50 hover:border-primary/30 hover:-translate-y-2 cursor-pointer">
 								<div className="mb-6 relative">
 									<div className="w-20 h-20 rounded-2xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-500">
 										<img
@@ -92,7 +92,7 @@ const Features = () => {
 					})}
 				</div>
 			</div>
-			<style jsx>{`
+			<style>{`
 				@keyframes float {
 					0%,
 					100% {

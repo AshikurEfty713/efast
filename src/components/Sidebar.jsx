@@ -3,8 +3,6 @@ import {
 	Headphones,
 	LayoutDashboard,
 	MessageSquare,
-	Package,
-	ShoppingCart,
 	Smartphone,
 	Wallet,
 	Menu,
@@ -52,13 +50,13 @@ export function Sidebar() {
 			{/* Overlay */}
 			{open && (
 				<div
-					className="fixed inset-0 bg-black/40 z-40 lg:hidden"
+					className="inset-0 bg-black/40 lg:hidden"
 					onClick={() => setOpen(false)}></div>
 			)}
 
 			{/* Sidebar */}
 			<aside
-				className={`fixed left-0 top-0 h-screen w-64 bg-white shadow-xl z-50
+				className={` w-64 bg-white shadow-xl z-10 mt-6 rounded-2xl
 					transform transition-transform duration-300
 					${open ? "translate-x-0" : "-translate-x-full"}
 					lg:translate-x-0
