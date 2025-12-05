@@ -110,14 +110,14 @@ export default function Complaints() {
 								<input
 									type="text"
 									placeholder="Enter complaint subject"
-									className="input input-bordered"
+									className="input input-bordered ml-2"
 								/>
 							</div>
 							<div className="form-control">
 								<label className="label">
 									<span className="label-text">Priority</span>
 								</label>
-								<select className="select select-bordered">
+								<select className="select select-bordered ml-2">
 									<option>Low</option>
 									<option>Medium</option>
 									<option>High</option>
@@ -129,7 +129,7 @@ export default function Complaints() {
 								<span className="label-text">Description</span>
 							</label>
 							<textarea
-								className="textarea textarea-bordered h-24"
+								className="textarea textarea-bordered h-24 ml-2"
 								placeholder="Describe your issue"></textarea>
 						</div>
 						<button

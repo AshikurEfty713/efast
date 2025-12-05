@@ -1,8 +1,10 @@
 import { Search, Edit, Check, X } from "lucide-react";
+import useAuth from "../../../hooks/useAuth";
 
 export default function Profile() {
+	const { user } = useAuth();
 	const profileImg =
-		"https://images.unsplash.com/photo-1599566150163-29194dcaad36?auto=format&fit=crop&w=500&q=80"; // Free avatar
+		"https://ashikurefty.netlify.app/assets/banner6-Cz5vAUPT.png"; // Free avatar
 
 	return (
 		<div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -19,7 +21,10 @@ export default function Profile() {
 						</div>
 					</div>
 
-					<h2 className="text-2xl font-semibold mb-1">Sam Rohnson</h2>
+					<h2 className="text-2xl font-semibold mb-1">{user.displayName}</h2>
+					<h5 className="text-xl text-gray-600 font-normal mb-1">
+						Software Engineer
+					</h5>
 					<p className="text-sm text-gray-500 text-center mb-4">
 						Last login: 17 Aug 2021, 14:42
 						<br />
@@ -34,7 +39,7 @@ export default function Profile() {
 
 						<div>
 							<label className="text-sm text-gray-600">Email</label>
-							<p className="text-gray-800">Sam.rohnson002@gmail.com</p>
+							<p className="text-gray-800">{user.email}</p>
 						</div>
 
 						<div className="flex items-center gap-2">

@@ -55,7 +55,7 @@ const Footer = () => {
 	];
 
 	return (
-		<footer className="relative w-full overflow-hidden">
+		<footer className="relative w-full overflow-hidden z-0">
 			<div
 				className="absolute inset-0 bg-cover bg-center bg-no-repeat"
 				style={{

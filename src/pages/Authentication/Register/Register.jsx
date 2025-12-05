@@ -1,28 +1,35 @@
 import React from "react";
 import { useForm } from "react-hook-form";
 import useAuth from "../../../hooks/useAuth";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import SocialLogin from "../SocialLogin/SocialLogin";
+import toast, { Toaster } from "react-hot-toast";
 
 const Register = () => {
 	const {
 		register,
 		handleSubmit,
+		reset,
 		formState: { errors },
 	} = useForm();
 
 	const { createUser } = useAuth();
+	const navigate = useNavigate();
 
 	const formSubmit = (data) => {
-		console.log(data);
-		createUser(data.email, data.password)
+		createUser(data.name, data.email, data.password)
 			.then((result) => {
 				console.log(result.user);
+				toast.success("Registration Successful!");
+				reset();
+				navigate("/login");
 			})
 			.catch((error) => {
 				console.error(error);
+				toast.error("Registration Failed!");
 			});
 	};
+
 	return (
 		<div>
 			<form onSubmit={handleSubmit(formSubmit)}>
@@ -31,7 +38,19 @@ const Register = () => {
 						<h1 className="lg:text-4xl text-3xl font-bold">
 							Create An Account
 						</h1>
+
 						<fieldset className="fieldset">
+							<label className="label">Name</label>
+							<input
+								type="text"
+								{...register("name", { required: "Please enter the name" })}
+								className="input"
+								placeholder="Name"
+							/>
+							{errors.name && (
+								<p className="text-red-500">{errors.name.message}</p>
+							)}
+
 							<label className="label">Email</label>
 							<input
 								type="email"
@@ -42,6 +61,7 @@ const Register = () => {
 							{errors.email && (
 								<p className="text-red-500">{errors.email.message}</p>
 							)}
+
 							<label className="label">Password</label>
 							<input
 								type="password"
@@ -57,23 +77,36 @@ const Register = () => {
 									Password enter 6 characters or longer
 								</p>
 							)}
+
 							<button className="btn bg-orange-500 lg:text-base text-sm text-white rounded-full lg:mt-4 mt-2">
 								Register
 							</button>
+
 							<div>
 								<p>
-									Have An Accoung?{" "}
+									Have An Account?{" "}
 									<Link to="/login" className="text-orange-400 link">
 										login
 									</Link>
 								</p>
 							</div>
+
 							<h5 className="text-center">or</h5>
-							<div>
-								<SocialLogin></SocialLogin>
-							</div>
+							<SocialLogin />
 						</fieldset>
 					</div>
+
+					<Toaster
+						position="top-right"
+						toastOptions={{
+							success: {
+								style: { background: "#d1fae5", color: "#065f46" },
+							},
+							error: {
+								style: { background: "#fee2e2", color: "#991b1b" },
+							},
+						}}
+					/>
 				</div>
 			</form>
 		</div>

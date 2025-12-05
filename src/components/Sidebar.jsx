@@ -3,7 +3,6 @@ import {
 	Headphones,
 	LayoutDashboard,
 	MessageSquare,
-	Smartphone,
 	Wallet,
 	Menu,
 	X,
@@ -22,13 +21,11 @@ export function Sidebar() {
 		{ path: "myParcel", label: "My Parcel", icon: Box },
 		{ path: "track", label: "Track", icon: Truck },
 		{ path: "accounts", label: "Accounts", icon: Wallet },
-		{ path: "mobiru", label: "Mobiru", icon: Smartphone },
 		{ path: "payments", label: "Payments", icon: CreditCard },
 		{ path: "complaints", label: "Complaints", icon: MessageSquare },
 		{ path: "supports", label: "Supports", icon: Headphones },
 	];
 
-	// ⭐ Active Route Checker
 	const isActive = (path) => {
 		if (path === "") return location.pathname === "/dashboard";
 		return (
@@ -40,7 +37,7 @@ export function Sidebar() {
 	return (
 		<>
 			{/* Mobile top bar */}
-			<div className="lg:hidden p-4 bg-white shadow flex items-center justify-between">
+			<div className="lg:hidden p-4 bg-white shadow flex items-center justify-between sticky top-0 z-10">
 				<h1 className="text-lg font-semibold">Dashboard</h1>
 				<button onClick={() => setOpen(true)}>
 					<Menu size={28} />
@@ -50,25 +47,26 @@ export function Sidebar() {
 			{/* Overlay */}
 			{open && (
 				<div
-					className="inset-0 bg-black/40 lg:hidden"
-					onClick={() => setOpen(false)}></div>
+					className="fixed inset-0 bg-black/40 z-10 lg:hidden"
+					onClick={() => setOpen(false)}>
+					<div className="lg:hidden absolute right-5 top-20 flex justify-end z-20">
+						<button onClick={() => setOpen(false)}>
+							<X
+								className="bg-white/50 cursor-pointer rounded-full w-9 h-9 p-1"
+								size={26}
+							/>
+						</button>
+					</div>
+				</div>
 			)}
 
 			{/* Sidebar */}
 			<aside
-				className={` w-64 bg-white shadow-xl z-10 mt-6 rounded-2xl
-					transform transition-transform duration-300
-					${open ? "translate-x-0" : "-translate-x-full"}
-					lg:translate-x-0
-				`}>
-				{/* Close button for mobile */}
-				<div className="lg:hidden p-4 flex justify-end">
-					<button onClick={() => setOpen(false)}>
-						<X size={26} />
-					</button>
-				</div>
+				className={`fixed lg:static left-0 top-0 h-full w-64 bg-white shadow-xl z-20 transform transition-transform duration-300 rounded-tr-2xl rounded-2xl mt-6
+					${open ? "translate-x-0" : "-translate-x-full"} lg:translate-x-0`}>
+				{/* Mobile close button */}
 
-				<div className="p-6">
+				<div className="p-6 flex flex-col h-full lg:pt-6 pt-16">
 					{/* Logo */}
 					<div className="flex items-center gap-3 mb-10">
 						<div className="w-10 h-10 bg-linear-to-br from-pink-500 to-orange-500 rounded-xl flex items-center justify-center">
@@ -83,11 +81,10 @@ export function Sidebar() {
 					</div>
 
 					{/* Menu */}
-					<nav className="space-y-2">
+					<nav className="flex-1 space-y-2">
 						{menuItems.map((item) => {
 							const Icon = item.icon;
 							const active = isActive(item.path);
-
 							return (
 								<Link
 									key={item.path}
@@ -107,6 +104,11 @@ export function Sidebar() {
 							);
 						})}
 					</nav>
+
+					{/* Footer or extra space */}
+					<div className="mt-auto text-xs text-gray-400 text-center py-4">
+						© 2025 Trackfast
+					</div>
 				</div>
 			</aside>
 		</>

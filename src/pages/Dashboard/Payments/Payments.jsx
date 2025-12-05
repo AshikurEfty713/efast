@@ -156,8 +156,8 @@ export default function Payments() {
 											<span
 												className={`badge ${
 													payment.status === "completed"
-														? "badge-success"
-														: "badge-warning"
+														? "bg-green-100 text-green-600"
+														: "bg-yellow-100 text-yellow-600"
 												}`}>
 												{payment.status}
 											</span>

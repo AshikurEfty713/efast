@@ -89,10 +89,6 @@ export const router = createBrowserRouter([
 				Component: Accounts,
 			},
 			{
-				path: "mobiru",
-				Component: Mobiru,
-			},
-			{
 				path: "payments",
 				Component: Payments,
 			},

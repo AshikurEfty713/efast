@@ -27,7 +27,7 @@ export default function Banner() {
 	};
 
 	return (
-		<div className="relative h-[750px] max-w-full overflow-hidden -top-26 ">
+		<div className="relative h-[620px] max-w-full overflow-hidden -top-26 ">
 			<div className="max-w-full absolute inset-0 flex items-center justify-center">
 				<img
 					src={worldMap}
@@ -123,9 +123,9 @@ export default function Banner() {
 			</svg>
 
 			<motion.div
-				className="absolute z-20 h-[250px] w-[250px]"
+				className="absolute z-20 h-[200px] w-[200px]"
 				style={{
-					offsetPath: "path('M -100,650  Q 1200,650 2100,650')",
+					offsetPath: "path('M -100,540  Q 1200,540 2100,540')",
 					offsetRotate: "auto",
 					offsetAnchor: "center",
 				}}
@@ -146,7 +146,7 @@ export default function Banner() {
 				initial={{ y: -50, opacity: 0 }}
 				animate={{ y: 0, opacity: 1 }}
 				transition={{ duration: 1, delay: 0.5 }}>
-				<h1 className="text-shadow-lg mb-2 text-6xl font-semibold tracking-wider text-white mt-34">
+				<h1 className="text-shadow-lg mb-2 lg:text-5xl text-3xl font-semibold tracking-wider text-white mt-34">
 					Trust Track Deliveries
 				</h1>
 				<p className="text-shadow-lg text-xl text-white/90">

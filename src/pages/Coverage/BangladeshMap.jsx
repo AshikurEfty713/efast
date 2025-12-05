@@ -32,7 +32,7 @@ export default function BangladeshMap({ branches }) {
 		}
 	};
 	return (
-		<div className="w-full h-full-screen rounded-xl overflow-hidden flex gap-5">
+		<div className="w-full h-full-screen rounded-xl overflow-hidden lg:flex gap-5">
 			<div className="bg-linear-to-br from-orange-400 to-orange-600 rounded-3xl px-8 py-12 md:py-16">
 				<div className="flex flex-col items-center text-center">
 					<h1 className="text-white mb-4 text-3xl md:text-4xl font-bold">
