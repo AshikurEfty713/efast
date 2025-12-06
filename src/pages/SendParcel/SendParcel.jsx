@@ -154,7 +154,7 @@ export default function SendParcel() {
 			totalCost: cost,
 			createdBy: user.email, // typo: "cretatedBy" → "createdBy"
 			paymentStatus: "unpaid", // typo: "peymentStatus" → "paymentStatus"
-			deliveryStatus: "not_collected",
+			deliveryStatus: "processing",
 			creationDate: new Date().toISOString(),
 			trackingId: generateTrackingID(),
 		};

@@ -1,3 +1,4 @@
+import { useQuery } from "@tanstack/react-query";
 import {
 	Filter,
 	Search,
@@ -15,111 +16,35 @@ import {
 	ChevronRight,
 } from "lucide-react";
 import { useState } from "react";
+import useAuth from "../../../hooks/useAuth";
+import useAxiosSecure from "../../../hooks/useAxiosSecure";
 
 export default function MyParcel() {
 	const [searchTerm, setSearchTerm] = useState("");
 	const [filterStatus, setFilterStatus] = useState("all");
 	const [dateFilter, setDateFilter] = useState("all");
 	const [selectedOrder, setSelectedOrder] = useState(null);
+	const { user } = useAuth();
 
-	const orders = [
-		{
-			id: "ORD-2025-001",
-			customer: "John Doe",
-			product: "Wireless Headphones",
-			amount: 129.99,
-			date: "2025-12-03",
-			status: "delivered",
-			trackingId: "TRK-789456",
-			carrier: "FedEx",
-			estimatedDelivery: "2025-12-05",
-			location: "New York, NY",
+	const axiosSecure = useAxiosSecure();
+	const { data: parcelList = [] } = useQuery({
+		queryKey: ["my-parcel", user.email],
+		queryFn: async () => {
+			const res = await axiosSecure.get(`/parcels?email=${user.email}`);
+			return res.data;
 		},
-		{
-			id: "ORD-2025-002",
-			customer: "Jane Smith",
-			product: "Smart Watch",
-			amount: 299.99,
-			date: "2025-12-03",
-			status: "in-transit",
-			trackingId: "TRK-123456",
-			carrier: "UPS",
-			estimatedDelivery: "2025-12-07",
-			location: "Chicago, IL",
-		},
-		{
-			id: "ORD-2025-003",
-			customer: "Mike Johnson",
-			product: "Laptop Stand",
-			amount: 49.99,
-			date: "2025-12-02",
-			status: "processing",
-			trackingId: "TRK-654321",
-			carrier: "USPS",
-			estimatedDelivery: "2025-12-10",
-			location: "Austin, TX",
-		},
-		{
-			id: "ORD-2025-004",
-			customer: "Sarah Williams",
-			product: "Mechanical Keyboard",
-			amount: 159.99,
-			date: "2025-12-02",
-			status: "delivered",
-			trackingId: "TRK-987654",
-			carrier: "DHL",
-			estimatedDelivery: "2025-12-04",
-			location: "Seattle, WA",
-		},
-		{
-			id: "ORD-2025-005",
-			customer: "David Brown",
-			product: "USB-C Hub",
-			amount: 79.99,
-			date: "2025-12-01",
-			status: "cancelled",
-			trackingId: "TRK-321654",
-			carrier: "FedEx",
-			estimatedDelivery: "2025-12-06",
-			location: "Boston, MA",
-		},
-		{
-			id: "ORD-2025-006",
-			customer: "Emily Davis",
-			product: "Webcam HD",
-			amount: 89.99,
-			date: "2025-12-01",
-			status: "in-transit",
-			trackingId: "TRK-456123",
-			carrier: "UPS",
-			estimatedDelivery: "2025-12-08",
-			location: "Miami, FL",
-		},
-		{
-			id: "ORD-2025-007",
-			customer: "Robert Wilson",
-			product: "Desk Lamp",
-			amount: 39.99,
-			date: "2025-11-30",
-			status: "delivered",
-			trackingId: "TRK-159357",
-			carrier: "USPS",
-			estimatedDelivery: "2025-12-03",
-			location: "Denver, CO",
-		},
-		{
-			id: "ORD-2025-008",
-			customer: "Lisa Anderson",
-			product: "Phone Case",
-			amount: 24.99,
-			date: "2025-11-30",
-			status: "processing",
-			trackingId: "TRK-753159",
-			carrier: "DHL",
-			estimatedDelivery: "2025-12-09",
-			location: "Phoenix, AZ",
-		},
-	];
+	});
+	console.log(parcelList);
+
+	// Normalize API response to an array. Backend may return an array directly
+	// or an object like { data: [...] } or { parcels: [...] }.
+	const parcelsArray = Array.isArray(parcelList)
+		? parcelList
+		: Array.isArray(parcelList?.data)
+		? parcelList.data
+		: Array.isArray(parcelList?.parcels)
+		? parcelList.parcels
+		: [];
 
 	const getStatusConfig = (status) => {
 		const configs = {
@@ -200,21 +125,22 @@ export default function MyParcel() {
 		);
 	};
 
-	const filteredOrders = orders.filter((order) => {
+	const filteredParcels = parcelsArray.filter((o) => {
+		const search = searchTerm.toLowerCase();
+
 		const matchesSearch =
-			order.id.toLowerCase().includes(searchTerm.toLowerCase()) ||
-			order.customer.toLowerCase().includes(searchTerm.toLowerCase()) ||
-			order.product.toLowerCase().includes(searchTerm.toLowerCase());
+			o.parcelName.toLowerCase().includes(search) ||
+			o.receiverName.toLowerCase().includes(search) ||
+			o.trackingId.toLowerCase().includes(search);
+
 		const matchesStatus =
-			filterStatus === "all" || order.status === filterStatus;
+			filterStatus === "all" || o.deliveryStatus === filterStatus;
 
 		let matchesDate = true;
 		if (dateFilter !== "all") {
-			const orderDate = new Date(order.date);
+			const orderDate = new Date(o.creationDate);
 			const today = new Date();
-			const daysDiff = Math.floor(
-				(today.getTime() - orderDate.getTime()) / (1000 * 60 * 60 * 24)
-			);
+			const daysDiff = Math.floor((today - orderDate) / (1000 * 60 * 60 * 24));
 
 			if (dateFilter === "today") matchesDate = daysDiff === 0;
 			else if (dateFilter === "week") matchesDate = daysDiff <= 7;
@@ -225,19 +151,24 @@ export default function MyParcel() {
 	});
 
 	const stats = {
-		total: orders.length,
-		delivered: orders.filter((o) => o.status === "delivered").length,
-		inTransit: orders.filter((o) => o.status === "in-transit").length,
-		processing: orders.filter((o) => o.status === "processing").length,
-		cancelled: orders.filter((o) => o.status === "cancelled").length,
-		revenue: orders
-			.filter((o) => o.status !== "cancelled")
-			.reduce((sum, o) => sum + o.amount, 0)
+		total: parcelsArray.length,
+		delivered: parcelsArray.filter((o) => o.deliveryStatus === "delivered")
+			.length,
+		inTransit: parcelsArray.filter((o) => o.deliveryStatus === "in-transit")
+			.length,
+		processing: parcelsArray.filter((o) => o.deliveryStatus === "processing")
+			.length,
+		cancelled: parcelsArray.filter((o) => o.deliveryStatus === "cancelled")
+			.length,
+		revenue: parcelsArray
+			.filter((o) => o.deliveryStatus !== "cancelled")
+			.reduce((sum, o) => sum + (Number(o.totalCost) || 0), 0)
 			.toFixed(2),
 	};
+	console.log(stats);
 
 	const getStatusCount = (status) => {
-		return orders.filter((o) => o.status === status).length;
+		return parcelsArray.filter((o) => o.deliveryStatus === status).length;
 	};
 
 	return (
@@ -268,7 +199,7 @@ export default function MyParcel() {
 							<div className="flex justify-between items-start">
 								<div>
 									<p className="text-white/80 text-sm font-medium">
-										Total Orders
+										Total Parcels
 									</p>
 									<h3 className="text-2xl font-bold mt-1">{stats.total}</h3>
 								</div>
@@ -280,6 +211,58 @@ export default function MyParcel() {
 								<div className="flex items-center gap-1 text-white/80 text-sm">
 									<TrendingUp size={16} />
 									<span>+12% from last month</span>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div className="card bg-white shadow-xl border border-gray-100">
+						<div className="card-body p-5">
+							<div className="flex justify-between items-start">
+								<div>
+									<p className="text-gray-600 text-sm font-medium">
+										Processing
+									</p>
+									<h3 className="text-2xl font-bold text-amber-600 mt-1">
+										{stats.processing}
+									</h3>
+								</div>
+								<div className="p-2 bg-amber-50 rounded-lg text-amber-600">
+									<Clock size={24} />
+								</div>
+							</div>
+							<div className="mt-4">
+								<div className="w-full bg-gray-100 rounded-full h-2">
+									<div
+										className="bg-linear-to-r from-amber-400 to-orange-500 h-2 rounded-full"
+										style={{
+											width: `${(stats.processing / stats.total) * 100}%`,
+										}}></div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div className="card bg-white shadow-xl border border-gray-100">
+						<div className="card-body p-5">
+							<div className="flex justify-between items-start">
+								<div>
+									<p className="text-gray-600 text-sm font-medium">
+										In Transit
+									</p>
+									<h3 className="text-2xl font-bold text-blue-600 mt-1">
+										{stats.inTransit}
+									</h3>
+								</div>
+								<div className="p-2 bg-blue-50 rounded-lg text-blue-600">
+									<Truck size={24} />
+								</div>
+							</div>
+							<div className="mt-4">
+								<div className="w-full bg-gray-100 rounded-full h-2">
+									<div
+										className="bg-linear-to-r from-blue-400 to-cyan-500 h-2 rounded-full"
+										style={{
+											width: `${(stats.inTransit / stats.total) * 100}%`,
+										}}></div>
 								</div>
 							</div>
 						</div>
@@ -314,50 +297,21 @@ export default function MyParcel() {
 						<div className="card-body p-5">
 							<div className="flex justify-between items-start">
 								<div>
-									<p className="text-gray-600 text-sm font-medium">
-										In Transit
-									</p>
-									<h3 className="text-2xl font-bold text-blue-600 mt-1">
-										{stats.inTransit}
+									<p className="text-gray-600 text-sm font-medium">Cancelled</p>
+									<h3 className="text-2xl font-bold text-rose-600 mt-1">
+										{stats.cancelled}
 									</h3>
 								</div>
-								<div className="p-2 bg-blue-50 rounded-lg text-blue-600">
-									<Truck size={24} />
+								<div className="p-2 bg-rose-50 rounded-lg text-rose-600">
+									<XCircle size={24} />
 								</div>
 							</div>
 							<div className="mt-4">
 								<div className="w-full bg-gray-100 rounded-full h-2">
 									<div
-										className="bg-linear-to-r from-blue-400 to-cyan-500 h-2 rounded-full"
+										className="bg-linear-to-r from-rose-400 to-pink-500 h-2 rounded-full"
 										style={{
-											width: `${(stats.inTransit / stats.total) * 100}%`,
-										}}></div>
-								</div>
-							</div>
-						</div>
-					</div>
-
-					<div className="card bg-white shadow-xl border border-gray-100">
-						<div className="card-body p-5">
-							<div className="flex justify-between items-start">
-								<div>
-									<p className="text-gray-600 text-sm font-medium">
-										Processing
-									</p>
-									<h3 className="text-2xl font-bold text-amber-600 mt-1">
-										{stats.processing}
-									</h3>
-								</div>
-								<div className="p-2 bg-amber-50 rounded-lg text-amber-600">
-									<Clock size={24} />
-								</div>
-							</div>
-							<div className="mt-4">
-								<div className="w-full bg-gray-100 rounded-full h-2">
-									<div
-										className="bg-linear-to-r from-amber-400 to-orange-500 h-2 rounded-full"
-										style={{
-											width: `${(stats.processing / stats.total) * 100}%`,
+											width: `${(stats.cancelled / stats.total) * 100}%`,
 										}}></div>
 								</div>
 							</div>
@@ -396,8 +350,8 @@ export default function MyParcel() {
 							<div className="flex items-center gap-3">
 								<div className="text-sm text-gray-600">
 									Showing{" "}
-									<span className="font-bold">{filteredOrders.length}</span> of{" "}
-									{orders.length} shipments
+									<span className="font-bold">{filteredParcels.length}</span> of{" "}
+									{parcelList.length} shipments
 								</div>
 							</div>
 						</div>
@@ -477,96 +431,131 @@ export default function MyParcel() {
 				{/* Orders Grid (Card View) */}
 				<div className="mb-8">
 					<div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-						{filteredOrders.length > 0 ? (
-							filteredOrders.map((order) => (
+						{filteredParcels.length > 0 ? (
+							filteredParcels.map((parcel) => (
 								<div
-									key={order.id}
+									key={parcel._id}
 									className="card bg-white shadow-xl border border-gray-100 hover:shadow-2xl transition-shadow duration-300">
 									<div className="card-body p-6">
+										{/* HEADER */}
 										<div className="flex justify-between items-start mb-4">
 											<div>
 												<div className="flex items-center gap-2 mb-1">
 													<Package size={18} className="text-gray-400" />
 													<span className="font-mono font-bold text-gray-800">
-														{order.id}
+														{parcel._id}
 													</span>
 												</div>
+
 												<h3 className="text-lg font-semibold text-gray-900">
-													{order.product}
+													{parcel.parcelName}
 												</h3>
+
 												<p className="text-gray-600 text-sm">
-													Ordered by {order.customer}
+													Receiver: {parcel.receiverName}
 												</p>
 											</div>
-											<StatusBadge status={order.status} />
+
+											<StatusBadge status={parcel.deliveryStatus} />
 										</div>
 
-										<div className="grid grid-cols-2 gap-4 mb-4">
+										{/* COST + DATE */}
+										<div className="grid grid-cols-3 gap-4 mb-4">
 											<div>
-												<p className="text-gray-500 text-sm">Amount</p>
+												<p className="text-gray-500 text-sm">Total Cost</p>
 												<p className="text-xl font-bold text-gray-900">
-													${order.amount.toFixed(2)}
+													${parcel.totalCost}
 												</p>
 											</div>
+											<div>
+												<p className="text-gray-500 text-sm">Weight</p>
+												<p className="text-sm font-bold text-gray-900">
+													${parcel.weight}
+												</p>
+											</div>
+											<div>
+												<p className="text-gray-500 text-sm">Type</p>
+												<p className="text-sm font-bold text-gray-900">
+													{parcel.type}
+												</p>
+											</div>
+
 											<div>
 												<p className="text-gray-500 text-sm">Order Date</p>
 												<div className="flex items-center gap-2">
 													<Calendar size={14} className="text-gray-400" />
-													<span className="font-medium">{order.date}</span>
-												</div>
-											</div>
-										</div>
-
-										<div className="mb-4">
-											<div className="flex items-center justify-between mb-2">
-												<p className="text-gray-500 text-sm">Tracking</p>
-												<span className="font-mono text-sm bg-gray-100 px-2 py-1 rounded">
-													{order.trackingId}
-												</span>
-											</div>
-											<div className="flex items-center gap-4 text-sm">
-												<div className="flex items-center gap-1">
-													<Truck size={14} className="text-gray-400" />
-													<span className="text-gray-600">{order.carrier}</span>
-												</div>
-												<div className="flex items-center gap-1">
-													<MapPin size={14} className="text-gray-400" />
-													<span className="text-gray-600">
-														{order.location}
+													<span className="font-medium">
+														{new Date(parcel.creationDate).toLocaleDateString()}
 													</span>
 												</div>
 											</div>
 										</div>
 
-										{order.status !== "cancelled" && (
+										{/* TRACKING */}
+										<div className="mb-4">
+											<div className="flex items-center justify-between mb-2">
+												<p className="text-gray-500 text-sm">Tracking</p>
+												<span className="font-mono text-sm bg-gray-100 px-2 py-1 rounded">
+													{parcel.trackingId}
+												</span>
+											</div>
+
+											<div className="flex items-center gap-4 text-sm">
+												<div className="flex items-center gap-1">
+													<Truck size={14} className="text-gray-400" />
+													<span className="text-gray-600">
+														{parcel.senderRegion} Center
+													</span>
+												</div>
+
+												<div className="flex items-center gap-1">
+													<MapPin size={14} className="text-gray-400" />
+													<span className="text-gray-600">
+														{parcel.receiverRegion}
+													</span>
+												</div>
+											</div>
+										</div>
+
+										{/* DELIVERY PROGRESS */}
+										{parcel.deliveryStatus !== "cancelled" && (
 											<div className="mb-4">
 												<div className="flex justify-between text-sm mb-1">
 													<span className="text-gray-500">
 														Estimated Delivery
 													</span>
-													<span className="font-medium">
-														{order.estimatedDelivery}
-													</span>
+													<span className="font-medium">3–5 days</span>
 												</div>
-												<StatusPill status={order.status} showProgress={true} />
+
+												<StatusPill
+													status={parcel.deliveryStatus}
+													showProgress={true}
+												/>
 											</div>
 										)}
 
+										{/* FOOTER */}
 										<div className="card-actions justify-between items-center mt-4 pt-4 border-t border-gray-100">
 											<div className="text-sm text-gray-500">
-												Last updated: {order.date} • {order.carrier}
+												Last updated:{" "}
+												{new Date(parcel.creationDate).toLocaleDateString()}
+												{" • "}
+												{parcel.senderRegion}
 											</div>
+
 											<div className="flex gap-2">
 												<button
 													className="btn btn-sm btn-ghost hover:bg-gray-100"
-													onClick={() => setSelectedOrder(order)}>
+													onClick={() => setSelectedOrder(parcel)}>
 													<Eye size={16} />
 													Details
 												</button>
+
 												<button className="btn btn-sm bg-linear-to-r from-blue-400 to-cyan-500 text-white hover:from-blue-500 hover:to-cyan-600">
 													<MapPin size={16} />
 													Track
 												</button>
+
 												<button className="btn btn-sm btn-square btn-ghost">
 													<MoreVertical size={16} />
 												</button>

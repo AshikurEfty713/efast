@@ -62,13 +62,13 @@ export function Sidebar() {
 
 			{/* Sidebar */}
 			<aside
-				className={`fixed lg:static left-0 top-0 h-full w-64 bg-white shadow-xl z-20 transform transition-transform duration-300 rounded-tr-2xl rounded-2xl mt-6
+				className={`fixed lg:sticky left-0 top-20 h-full w-64 bg-white shadow-xl z-20 transform transition-transform duration-300 rounded-tr-2xl rounded-2xl mt-6
 					${open ? "translate-x-0" : "-translate-x-full"} lg:translate-x-0`}>
 				{/* Mobile close button */}
 
 				<div className="p-6 flex flex-col h-full lg:pt-6 pt-16">
 					{/* Logo */}
-					<div className="flex items-center gap-3 mb-10">
+					<div className="flex items-center gap-3 mb-6">
 						<div className="w-10 h-10 bg-linear-to-br from-pink-500 to-orange-500 rounded-xl flex items-center justify-center">
 							<div className="border-4 border-white rounded-lg">
 								<h5 className="px-2 py-1 text-white font-bold">T</h5>
@@ -90,13 +90,13 @@ export function Sidebar() {
 									key={item.path}
 									to={item.path}
 									onClick={() => setOpen(false)}
-									className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${
+									className={`flex items-center gap-3 text-sm px-4 py-2 rounded-lg transition-all ${
 										active
 											? "text-orange-500 font-semibold bg-orange-50"
 											: "text-gray-600 hover:bg-gray-100"
 									}`}>
 									<Icon
-										size={20}
+										size={16}
 										className={`${active ? "text-orange-500" : ""}`}
 									/>
 									<span>{item.label}</span>
