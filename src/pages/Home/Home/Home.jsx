@@ -25,7 +25,7 @@ const Home = () => {
 			<WorkProcess></WorkProcess>
 			<BeMerchant></BeMerchant>
 			<PopularPlace></PopularPlace>
-			{/* <BlogsSlider></BlogsSlider> */}
+			<BlogsSlider></BlogsSlider>
 			<ReadyToStart></ReadyToStart>
 		</div>
 	);

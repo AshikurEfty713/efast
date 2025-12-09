@@ -51,7 +51,8 @@ const blogs = [
 ];
 
 export default function BlogsSlider() {
-    const sliderRef = useRef < Slider > (null);
+    // useRef must receive a single initial value; TS-style generics break in JSX
+    const sliderRef = useRef(null);
 
     const settings = {
         dots: false,
@@ -81,7 +82,7 @@ export default function BlogsSlider() {
     };
 
     return (
-        <div className="container mx-auto px-4 py-12 md:py-20">
+        <div className="max-w-7xl mx-auto px-4 py-12 md:py-20">
             {/* Header Section */}
             <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-8 mb-12">
                 <div className="max-w-2xl">
@@ -99,12 +100,24 @@ export default function BlogsSlider() {
                         advice by speaking to one of our financial advisers!
                     </p>
                 </div>
-                <button className="bg-gray-900 text-white hover:bg-gray-800 rounded-full px-6 py-3 flex items-center gap-3 self-start lg:self-auto transition-colors">
-                    Explore All Case Studies
-                    <div className="bg-orange-500 rounded-full p-2">
+
+                <button className="group relative cursor-pointer overflow-hidden rounded-full px-6 py-3 flex items-center gap-3 
+                                    bg-gray-900 text-white transition-all duration-300">
+
+                    <span className="relative z-10">Explore All Case Studies</span>
+
+                    <div className="relative z-10 bg-orange-500 rounded-full p-2 group-hover:bg-white group-hover:text-orange-500 transition-all duration-300">
                         <ArrowRight className="w-5 h-5" />
                     </div>
+
+                    {/* ORANGE FILL BACKGROUND */}
+                    <span className="absolute inset-0 bg-orange-500 rounded-full
+                        translate-x-full -translate-y-full 
+                        group-hover:translate-x-0 group-hover:translate-y-0
+                        transition-transform duration-500 ease-out">
+                    </span>
                 </button>
+
             </div>
 
             {/* Slider Section */}
@@ -112,7 +125,7 @@ export default function BlogsSlider() {
                 <Slider ref={sliderRef} {...settings}>
                     {blogs.map((blog) => (
                         <div key={blog.id} className="px-3">
-                            <div className="bg-white border border-gray-200 rounded-lg hover:shadow-xl transition-shadow duration-300 h-full group overflow-hidden">
+                            <div className="bg-white border border-gray-200 rounded-lg cursor-pointer hover:shadow-xl transition-shadow duration-300 h-full group overflow-hidden">
                                 <div className="h-48 overflow-hidden">
                                     <img
                                         src={blog.image}
@@ -139,8 +152,8 @@ export default function BlogsSlider() {
                                             ))}
                                         </div>
                                         <div className="relative">
-                                            <div className="w-10 h-10 rounded-full border border-gray-300 flex items-center justify-center group-hover:bg-orange-500 group-hover:border-orange-500 transition-all duration-300">
-                                                <ArrowRight className="w-5 h-5 text-gray-700 group-hover:text-white transition-colors duration-300" />
+                                            <div className="w-10 h-10 rounded-xl border border-gray-300 flex items-center justify-center group-hover:bg-orange-500 group-hover:border-orange-500 transition-all duration-300">
+                                                <ArrowRight className="w-5 h-5 text-gray-700 group-hover:text-white group-hover:rounded-tl-full transition-colors duration-300" />
                                             </div>
                                         </div>
                                     </div>
