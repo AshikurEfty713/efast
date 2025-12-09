@@ -89,7 +89,7 @@ const Footer = () => {
 											key={index}
 											href={social.href}
 											aria-label={social.label}
-											className="text-gray-400 hover:text-cyan-400 transition-colors duration-300 hover:scale-110 transform">
+											className="text-gray-400 hover:text-orange-400 transition-colors duration-300 hover:scale-110 transform">
 											<Icon size={20} />
 										</a>
 									);
@@ -109,7 +109,7 @@ const Footer = () => {
 											<li key={linkIndex}>
 												<Link
 													href={link.href}
-													className="text-gray-300 hover:text-cyan-400 transition-colors duration-300 text-sm">
+													className="text-gray-300 hover:text-orange-500 transition-colors duration-300 text-sm">
 													{link.label}
 												</Link>
 											</li>
@@ -129,7 +129,7 @@ const Footer = () => {
 									<li key={linkIndex}>
 										<Link
 											href={link.href}
-											className="text-gray-300 hover:text-cyan-400 transition-colors duration-300 text-sm">
+											className="text-gray-300 hover:text-orange-500 transition-colors duration-300 text-sm">
 											{link.label}
 										</Link>
 									</li>
@@ -139,13 +139,13 @@ const Footer = () => {
 							<div className="flex flex-col gap-3 mt-6 pt-6 border-t border-gray-700">
 								<a
 									href="tel:+18005551234"
-									className="flex items-center gap-2 text-gray-300 hover:text-cyan-400 transition-colors text-sm">
+									className="flex items-center gap-2 text-gray-300 hover:text-orange-500 transition-colors text-sm">
 									<Phone size={16} />
 									+1 (800) 555-1234
 								</a>
 								<a
 									href="mailto:support@efast.com"
-									className="flex items-center gap-2 text-gray-300 hover:text-cyan-400 transition-colors text-sm">
+									className="flex items-center gap-2 text-gray-300 hover:text-orange-500 transition-colors text-sm">
 									<Mail size={16} />
 									support@efast.com
 								</a>
@@ -167,17 +167,17 @@ const Footer = () => {
 						<div className="flex gap-6">
 							<Link
 								href="#privacy"
-								className="text-gray-400 hover:text-cyan-400 transition-colors text-sm">
+								className="text-gray-400 hover:text-orange-400 transition-colors text-sm">
 								Privacy Policy
 							</Link>
 							<Link
 								href="#terms"
-								className="text-gray-400 hover:text-cyan-400 transition-colors text-sm">
+								className="text-gray-400 hover:text-orange-400 transition-colors text-sm">
 								Terms of Service
 							</Link>
 							<Link
 								href="#cookies"
-								className="text-gray-400 hover:text-cyan-400 transition-colors text-sm">
+								className="text-gray-400 hover:text-orange-400 transition-colors text-sm">
 								Cookie Settings
 							</Link>
 						</div>

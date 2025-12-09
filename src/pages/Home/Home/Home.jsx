@@ -10,6 +10,7 @@ import ReadyToStart from "../ReadyToStart/ReadyToStart";
 import ExploreCompany from "../ExploreCompany/ExploreCompany";
 import AboutUs from "../../AboutUs/AboutUs";
 import TransportForm from "../TransportForm/TransportForm";
+import BlogsSlider from "../BlogsSlider/BlogsSlider";
 
 const Home = () => {
 	return (
@@ -24,6 +25,7 @@ const Home = () => {
 			<WorkProcess></WorkProcess>
 			<BeMerchant></BeMerchant>
 			<PopularPlace></PopularPlace>
+			{/* <BlogsSlider></BlogsSlider> */}
 			<ReadyToStart></ReadyToStart>
 		</div>
 	);
