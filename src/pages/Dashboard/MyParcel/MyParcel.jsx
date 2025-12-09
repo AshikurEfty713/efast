@@ -14,8 +14,10 @@ import {
 	TrendingUp,
 	MoreVertical,
 	ChevronRight,
+	Trash2,
+	Pencil,
 } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import useAuth from "../../../hooks/useAuth";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 
@@ -25,6 +27,10 @@ export default function MyParcel() {
 	const [dateFilter, setDateFilter] = useState("all");
 	const [selectedOrder, setSelectedOrder] = useState(null);
 	const { user } = useAuth();
+	// track which parcel's menu is open by id (null = none)
+	const [openId, setOpenId] = useState(null);
+	// refs for each parcel menu container (so we can detect outside clicks without data attributes)
+	const menuRefs = useRef({});
 
 	const axiosSecure = useAxiosSecure();
 	const { data: parcelList = [] } = useQuery({
@@ -35,6 +41,26 @@ export default function MyParcel() {
 		},
 	});
 	console.log(parcelList);
+
+	// toggle menu for a specific parcel id
+	const toggleOpen = (id) => {
+		setOpenId((prev) => (prev === id ? null : id));
+	};
+	// close open menu when clicking outside
+	useEffect(() => {
+		const handleDocClick = (e) => {
+			if (openId == null) return;
+			const node = menuRefs.current[openId];
+			if (node && node.contains(e.target)) return;
+			setOpenId(null);
+		};
+
+		document.addEventListener("click", handleDocClick);
+
+		return () => {
+			document.removeEventListener("click", handleDocClick);
+		};
+	}, [openId]);
 
 	// Normalize API response to an array. Backend may return an array directly
 	// or an object like { data: [...] } or { parcels: [...] }.
@@ -556,9 +582,48 @@ export default function MyParcel() {
 													Track
 												</button>
 
-												<button className="btn btn-sm btn-square btn-ghost">
-													<MoreVertical size={16} />
-												</button>
+												<div
+													className="relative"
+													ref={(el) => (menuRefs.current[parcel._id] = el)}>
+													<button
+														onClick={() => toggleOpen(parcel._id)}
+														className="btn btn-sm btn-square btn-ghost">
+														<MoreVertical size={16} />
+													</button>
+													{openId === parcel._id && (
+														<div className="absolute right-0 mt-2 w-36 bg-white shadow-md border border-orange-600/20 rounded-md p-2 z-50">
+															{/* <button
+																onClick={() => {
+																	setSelectedOrder(parcel);
+																	setOpenId(null);
+																}}
+																className="flex items-center gap-2 cursor-pointer w-full text-left px-3 py-1 hover:bg-gray-100 rounded">
+																<Eye size={16} />
+																<span>Details</span>
+															</button> */}
+
+															<button
+																onClick={() => {
+																	// placeholder: open edit modal or navigate to edit
+																	setOpenId(null);
+																}}
+																className="flex items-center gap-2 cursor-pointer w-full text-left px-3 py-1 hover:bg-gray-100 rounded">
+																<Pencil size={16} />
+																<span>Edit</span>
+															</button>
+
+															<button
+																onClick={() => {
+																	// placeholder: confirm delete
+																	setOpenId(null);
+																}}
+																className="flex items-cente gap-2 cursor-pointer w-full text-left px-3 py-1 hover:bg-red-100 text-red-600 rounded">
+																<Trash2 size={16} />
+																<span>Delete</span>
+															</button>
+														</div>
+													)}
+												</div>
 											</div>
 										</div>
 									</div>
