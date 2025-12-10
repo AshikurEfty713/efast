@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import {
 	Filter,
 	Search,
@@ -18,21 +18,24 @@ import {
 	Pencil,
 } from "lucide-react";
 import { useEffect, useState, useRef } from "react";
+import { toast } from "react-hot-toast";
 import useAuth from "../../../hooks/useAuth";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
+import Swal from "sweetalert2";
+import { Link } from "react-router";
 
 export default function MyParcel() {
 	const [searchTerm, setSearchTerm] = useState("");
 	const [filterStatus, setFilterStatus] = useState("all");
 	const [dateFilter, setDateFilter] = useState("all");
 	const [selectedOrder, setSelectedOrder] = useState(null);
+	const [data, setData] = useState([]);
 	const { user } = useAuth();
-	// track which parcel's menu is open by id (null = none)
 	const [openId, setOpenId] = useState(null);
-	// refs for each parcel menu container (so we can detect outside clicks without data attributes)
 	const menuRefs = useRef({});
 
 	const axiosSecure = useAxiosSecure();
+	const queryClient = useQueryClient();
 	const { data: parcelList = [] } = useQuery({
 		queryKey: ["my-parcel", user.email],
 		queryFn: async () => {
@@ -45,6 +48,46 @@ export default function MyParcel() {
 	// toggle menu for a specific parcel id
 	const toggleOpen = (id) => {
 		setOpenId((prev) => (prev === id ? null : id));
+	};
+
+	// delete parcel and remove from UI by updating react-query cache
+	const handleDelete = async (id) => {
+		if (!id) return;
+		const confirm = await Swal.fire({
+			title: "Are you sure?",
+			text: "This parcel will be permanently deleted!",
+			icon: "warning",
+			showCancelButton: true,
+			confirmButtonText: "Yes, delete it",
+			cancelButtonText: "Cancel",
+			confirmButtonColor: "#e11d48",
+			cancelButtonColor: "#6b7280",
+		});
+		if (!confirm) return;
+		try {
+			const res = await axiosSecure.delete(`/parcels/${id}`);
+			// optimistic removal from cache
+			queryClient.setQueryData(["my-parcel", user.email], (old) => {
+				if (!old) return old;
+				if (Array.isArray(old)) return old.filter((o) => o._id !== id);
+				if (Array.isArray(old.data))
+					return { ...old, data: old.data.filter((o) => o._id !== id) };
+				if (Array.isArray(old.parcels))
+					return { ...old, parcels: old.parcels.filter((o) => o._id !== id) };
+				return old;
+			});
+			Swal.fire({
+				title: "Deleted!",
+				text: "Parcel has been deleted.",
+				icon: "success",
+				timer: 1000,
+				showConfirmButton: false,
+			});
+			setOpenId(null);
+		} catch (error) {
+			console.error("Delete error:", error);
+			toast.error(error.response?.data?.message || "Failed to delete parcel");
+		}
 	};
 	// close open menu when clicking outside
 	useEffect(() => {
@@ -570,12 +613,14 @@ export default function MyParcel() {
 											</div>
 
 											<div className="flex gap-2">
-												<button
-													className="btn btn-sm btn-ghost hover:bg-gray-100"
-													onClick={() => setSelectedOrder(parcel)}>
-													<Eye size={16} />
-													Details
-												</button>
+												<Link to={`parcelDetails/${parcel._id}`}>
+													<button
+														className="btn btn-sm btn-ghost hover:bg-gray-100"
+														onClick={() => setSelectedOrder(parcel)}>
+														<Eye size={16} />
+														Details
+													</button>
+												</Link>
 
 												<button className="btn btn-sm bg-linear-to-r from-blue-400 to-cyan-500 text-white hover:from-blue-500 hover:to-cyan-600">
 													<MapPin size={16} />
@@ -592,19 +637,8 @@ export default function MyParcel() {
 													</button>
 													{openId === parcel._id && (
 														<div className="absolute right-0 mt-2 w-36 bg-white shadow-md border border-orange-600/20 rounded-md p-2 z-50">
-															{/* <button
-																onClick={() => {
-																	setSelectedOrder(parcel);
-																	setOpenId(null);
-																}}
-																className="flex items-center gap-2 cursor-pointer w-full text-left px-3 py-1 hover:bg-gray-100 rounded">
-																<Eye size={16} />
-																<span>Details</span>
-															</button> */}
-
 															<button
 																onClick={() => {
-																	// placeholder: open edit modal or navigate to edit
 																	setOpenId(null);
 																}}
 																className="flex items-center gap-2 cursor-pointer w-full text-left px-3 py-1 hover:bg-gray-100 rounded">
@@ -614,8 +648,8 @@ export default function MyParcel() {
 
 															<button
 																onClick={() => {
-																	// placeholder: confirm delete
 																	setOpenId(null);
+																	handleDelete(parcel._id);
 																}}
 																className="flex items-cente gap-2 cursor-pointer w-full text-left px-3 py-1 hover:bg-red-100 text-red-600 rounded">
 																<Trash2 size={16} />

@@ -12,12 +12,12 @@ import SendParcel from "../pages/SendParcel/SendParcel";
 import DashboardLayout from "../layouts/DashboardLayout";
 import MyParcel from "../pages/Dashboard/MyParcel/MyParcel";
 import Accounts from "../pages/Dashboard/Accounts/Accounts";
-import Mobiru from "../pages/Dashboard/Mobiru/Mobiru";
 import Payments from "../pages/Dashboard/Payments/Payments";
 import Complaints from "../pages/Dashboard/Complaints/Complaints";
 import Supports from "../pages/Dashboard/Supports/Supports";
 import Track from "../pages/Dashboard/Track/Track";
 import Profile from "../pages/Dashboard/Profile/Profile";
+import ParcelDetails from "../pages/Dashboard/MyParcel/ParcelDetails";
 
 export const router = createBrowserRouter([
 	{
@@ -79,7 +79,14 @@ export const router = createBrowserRouter([
 			{
 				path: "myParcel",
 				Component: MyParcel,
+				children: [
+					{
+						path: "parcelDetails/:id",
+						Component: ParcelDetails,
+					},
+				],
 			},
+
 			{
 				path: "track",
 				Component: Track,

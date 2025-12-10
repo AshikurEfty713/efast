@@ -7,7 +7,7 @@ import personImg1 from "../../../assets/person/personimg1.png";
 
 export default function WorkProcess() {
 	return (
-		<div className="min-h-screen bg-white max-w-7xl mx-auto">
+		<div className=" bg-white max-w-7xl mx-auto">
 			{/* Hero Section */}
 			<div className="relative overflow-hidden bg-linear-to-br from-yellow-50 to-orange-50  rounded-4xl">
 				<div className="container mx-auto px-4">
