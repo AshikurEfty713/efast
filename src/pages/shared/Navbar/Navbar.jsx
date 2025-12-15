@@ -6,17 +6,16 @@ import useAuth from "../../../hooks/useAuth";
 import { ChevronDown } from "lucide-react";
 
 const Navbar = () => {
-	const { user } = useAuth();
-	// const handleLogout = () => {
-	// 	logOut()
-	// 		.then(() => {
-	// 			console.log("Logged out successfully");
-	// 			Navigate("/login");
-	// 		})
-	// 		.catch((error) => {
-	// 			console.error("Looged out failed", error);
-	// 		});
-	// };
+	const { user, logOut } = useAuth();
+	const handleLogout = () => {
+		logOut()
+			.then(() => {
+				console.log("Logged out successfully");
+			})
+			.catch((error) => {
+				console.error("Looged out failed", error);
+			});
+	};
 
 	const navItems = (
 		<>
@@ -139,9 +138,9 @@ const Navbar = () => {
 									<li>
 										<a>Settings</a>
 									</li>
-									{/* <li>
+									<li>
 										<Link onClick={handleLogout}>Logout</Link>
-									</li> */}
+									</li>
 								</ul>
 							</div>
 						</div>

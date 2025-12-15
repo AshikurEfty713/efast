@@ -16,13 +16,14 @@ import {
 	ChevronRight,
 	Trash2,
 	Pencil,
+	HandCoins,
 } from "lucide-react";
 import { useEffect, useState, useRef } from "react";
 import { toast } from "react-hot-toast";
 import useAuth from "../../../hooks/useAuth";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import Swal from "sweetalert2";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 
 export default function MyParcel() {
 	const [searchTerm, setSearchTerm] = useState("");
@@ -33,10 +34,11 @@ export default function MyParcel() {
 	const { user } = useAuth();
 	const [openId, setOpenId] = useState(null);
 	const menuRefs = useRef({});
+	const navigate = useNavigate();
 
 	const axiosSecure = useAxiosSecure();
 	const queryClient = useQueryClient();
-	const { data: parcelList = [] } = useQuery({
+	const { data: parcelList = [], refetch } = useQuery({
 		queryKey: ["my-parcel", user.email],
 		queryFn: async () => {
 			const res = await axiosSecure.get(`/parcels?email=${user.email}`);
@@ -50,9 +52,12 @@ export default function MyParcel() {
 		setOpenId((prev) => (prev === id ? null : id));
 	};
 
-	// delete parcel and remove from UI by updating react-query cache
+	const handlePay = (id) => {
+		console.log("Proceed to payment for", id);
+		navigate(`/dashboard/payment/${id}`);
+	};
+
 	const handleDelete = async (id) => {
-		if (!id) return;
 		const confirm = await Swal.fire({
 			title: "Are you sure?",
 			text: "This parcel will be permanently deleted!",
@@ -60,35 +65,31 @@ export default function MyParcel() {
 			showCancelButton: true,
 			confirmButtonText: "Yes, delete it",
 			cancelButtonText: "Cancel",
-			confirmButtonColor: "#e11d48",
+			confirmButtonColor: "#ff5454",
 			cancelButtonColor: "#6b7280",
 		});
-		if (!confirm) return;
-		try {
-			const res = await axiosSecure.delete(`/parcels/${id}`);
-			// optimistic removal from cache
-			queryClient.setQueryData(["my-parcel", user.email], (old) => {
-				if (!old) return old;
-				if (Array.isArray(old)) return old.filter((o) => o._id !== id);
-				if (Array.isArray(old.data))
-					return { ...old, data: old.data.filter((o) => o._id !== id) };
-				if (Array.isArray(old.parcels))
-					return { ...old, parcels: old.parcels.filter((o) => o._id !== id) };
-				return old;
-			});
-			Swal.fire({
-				title: "Deleted!",
-				text: "Parcel has been deleted.",
-				icon: "success",
-				timer: 1000,
-				showConfirmButton: false,
-			});
-			setOpenId(null);
-		} catch (error) {
-			console.error("Delete error:", error);
-			toast.error(error.response?.data?.message || "Failed to delete parcel");
+		if (confirm.isConfirmed) {
+			try {
+				axiosSecure.delete(`/parcels/${id}`).then((res) => {
+					if (res.data.deletedCount) {
+						Swal.fire({
+							title: "Deleted!",
+							text: "Parcel has been deleted.",
+							icon: "success",
+							timer: 1000,
+							showConfirmButton: false,
+						});
+					}
+					refetch();
+				});
+			} catch {
+				(error) => {
+					"Deleted Faild", error;
+				};
+			}
 		}
 	};
+
 	// close open menu when clicking outside
 	useEffect(() => {
 		const handleDocClick = (e) => {
@@ -427,8 +428,8 @@ export default function MyParcel() {
 
 						<div className="grid grid-cols-1 md:grid-cols-3 gap-4">
 							<div className="relative">
-								<div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-									<Search size={18} className="text-gray-400" />
+								<div className="absolute inset-y-0 z-10 left-0 pl-3 flex items-center pointer-events-none">
+									<Search size={18} className="stroke-orange-600" />
 								</div>
 								<input
 									type="text"
@@ -525,7 +526,15 @@ export default function MyParcel() {
 												</p>
 											</div>
 
-											<StatusBadge status={parcel.deliveryStatus} />
+											<div className="flex flex-col gap-3">
+												<StatusBadge status={parcel.deliveryStatus} />
+												<button
+													onClick={() => handlePay(parcel._id)}
+													className="flex gap-1 cursor-pointer justify-center py-1.5 rounded-full w-full bg-cyan-500 text-white">
+													<HandCoins className="h-5 w-5" />
+													Pay
+												</button>
+											</div>
 										</div>
 
 										{/* COST + DATE */}

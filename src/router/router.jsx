@@ -18,6 +18,8 @@ import Supports from "../pages/Dashboard/Supports/Supports";
 import Track from "../pages/Dashboard/Track/Track";
 import Profile from "../pages/Dashboard/Profile/Profile";
 import ParcelDetails from "../pages/Dashboard/MyParcel/ParcelDetails";
+import Payment from "../pages/Dashboard/Payment/Payment";
+import Checkout from "../pages/Dashboard/Checkout/Checkout";
 
 export const router = createBrowserRouter([
 	{
@@ -96,9 +98,18 @@ export const router = createBrowserRouter([
 				Component: Accounts,
 			},
 			{
+				path: "checkout",
+				Component: Checkout,
+			},
+			{
+				path: "payment/:id",
+				Component: Payment,
+			},
+			{
 				path: "payments",
 				Component: Payments,
 			},
+
 			{
 				path: "complaints",
 				Component: Complaints,
