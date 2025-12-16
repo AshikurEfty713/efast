@@ -81,14 +81,11 @@ export const router = createBrowserRouter([
 			{
 				path: "myParcel",
 				Component: MyParcel,
-				children: [
-					{
-						path: "parcelDetails/:id",
-						Component: ParcelDetails,
-					},
-				],
 			},
-
+			{
+				path: "parcelDetails/:id",
+				Component: ParcelDetails,
+			},
 			{
 				path: "track",
 				Component: Track,
@@ -98,7 +95,7 @@ export const router = createBrowserRouter([
 				Component: Accounts,
 			},
 			{
-				path: "checkout",
+				path: "checkout/:parcelId",
 				Component: Checkout,
 			},
 			{
@@ -117,6 +114,10 @@ export const router = createBrowserRouter([
 			{
 				path: "supports",
 				Component: Supports,
+			},
+			{
+				path: "track",
+				Component: Track,
 			},
 		],
 	},

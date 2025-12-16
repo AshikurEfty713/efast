@@ -13,7 +13,7 @@ import {
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
-export default function EnhancedTrack() {
+export default function Track() {
 	const [trackId, setTrackId] = useState("");
 	const [trackingData, setTrackingData] = useState(null);
 	const [isSearching, setIsSearching] = useState(false);

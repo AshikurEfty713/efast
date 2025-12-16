@@ -2,10 +2,12 @@ import { useState } from "react";
 import StripeCheckout from "./StripeCheckout";
 import BkashCheckout from "./BkashCheckout";
 import CodCheckout from "./CodCheckout";
+import { useParams } from "react-router";
 
 const Checkout = () => {
 	const [method, setMethod] = useState("");
-
+	const { parcelId } = useParams();
+	console.log(parcelId);
 	return (
 		<div className="max-w-md mx-auto mt-10 p-6 border rounded">
 			<h2 className="text-xl font-bold mb-4">Checkout</h2>
@@ -35,6 +37,9 @@ const Checkout = () => {
 				{method === "bkash" && <BkashCheckout />}
 				{method === "cod" && <CodCheckout />}
 			</div>
+			<button className="p-3 bg-orange-500 text-white rounded-2xl">
+				Payment
+			</button>
 		</div>
 	);
 };

@@ -1,6 +1,5 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import {
-	Filter,
 	Search,
 	Calendar,
 	Package,
@@ -17,9 +16,9 @@ import {
 	Trash2,
 	Pencil,
 	HandCoins,
+	Route,
 } from "lucide-react";
 import { useEffect, useState, useRef } from "react";
-import { toast } from "react-hot-toast";
 import useAuth from "../../../hooks/useAuth";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import Swal from "sweetalert2";
@@ -54,7 +53,7 @@ export default function MyParcel() {
 
 	const handlePay = (id) => {
 		console.log("Proceed to payment for", id);
-		navigate(`/dashboard/payment/${id}`);
+		navigate(`/dashboard/checkout/${id}`);
 	};
 
 	const handleDelete = async (id) => {
@@ -622,7 +621,7 @@ export default function MyParcel() {
 											</div>
 
 											<div className="flex gap-2">
-												<Link to={`parcelDetails/${parcel._id}`}>
+												<Link to={`/dashboard/parcelDetails/${parcel._id}`}>
 													<button
 														className="btn btn-sm btn-ghost hover:bg-gray-100"
 														onClick={() => setSelectedOrder(parcel)}>
@@ -631,10 +630,12 @@ export default function MyParcel() {
 													</button>
 												</Link>
 
-												<button className="btn btn-sm bg-linear-to-r from-blue-400 to-cyan-500 text-white hover:from-blue-500 hover:to-cyan-600">
-													<MapPin size={16} />
-													Track
-												</button>
+												<Link to={"/dashboard/track"}>
+													<button className="btn btn-sm bg-linear-to-r from-blue-400 to-cyan-500 text-white hover:from-blue-500 hover:to-cyan-600">
+														<MapPin size={16} />
+														Track
+													</button>
+												</Link>
 
 												<div
 													className="relative"
